@@ -14,7 +14,7 @@ const Home: React.FC = () => {
           <span className="text-primary italic font-normal block mt-1">da Dayane</span>
         </h1>
         <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
-          Celebrando o amor em cada detalhe do nosso novo lar.
+          É com muita felicidade que abro as portas da minha nova casa para as pessoas que fazem parte da minha história. Gostaria muito de contar com a sua presença para celebrar essa nova fase e encher esse lar de boas energias!
         </p>
       </header>
 
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         <div className="relative w-full aspect-[4/5] rounded-t-[10rem] rounded-b-2xl overflow-hidden shadow-2xl ring-4 ring-white">
           <div 
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105" 
-            style={{ backgroundImage: `url('https://lh3.googleusercontent.com/aida-public/AB6AXuBgwV6o23u-HNvNqxux-gLYiB3surG5PTYPEsV9r2JHiJaTN3muSNQXSbjZlUpoeygnes6kr5jGjW3Np0pmHLIW-hv67Z2zbDFB1NsS6mpeR1qZZq_IGkecDlx9Q6J3uDoE24l_q9Nyp5rwzi1l_6U_2YMLN2KlpGks1hlc8UI9_31gq06Mi_W-eBKIzDl4JJowynQYZd5RDweGWsuCxCtIyuMyvGY5Zf-RQMk44icCnWjPAHOlAe8XeJg1r6XY8liLMnYryAxu1Yw')` }}
+            style={{ backgroundImage: `url('img/apartamento1.png')` }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
         </div>
