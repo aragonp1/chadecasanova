@@ -4,15 +4,15 @@ import BohoButton from '../components/BohoButton';
 import { GiftItem } from '../types';
 
 const GIFT_IDEAS: Partial<GiftItem>[] = [
-  { id: '1', name: 'Jogo de Jantar 20 Peças', imageUrl: 'https://picsum.photos/400/300?random=11' },
-  { id: '2', name: 'Manta para Sofá Boho', imageUrl: 'https://picsum.photos/400/300?random=12' },
-  { id: '3', name: 'Conjunto de Taças de Cristal', imageUrl: 'https://picsum.photos/400/300?random=13' },
+  { id: '1', name: 'Air Fryer AFON-12L-BI', imageUrl: 'https://m.media-amazon.com/images/I/51G4AxVAJxL._AC_SX679_.jpg' },
+  { id: '2', name: 'Cooktop por Indução', imageUrl: 'https://m.media-amazon.com/images/I/61YqJJSdbKL._AC_SX679_.jpg' },
+  { id: '3', name: 'Jogo com 8 Panelas Antiaderentes', imageUrl: 'https://m.media-amazon.com/images/I/51lEScBIRDL._AC_SX679_.jpg' },
 ];
 
 const Gifts: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const pixKey = "seu-email-ou-cpf-aqui@pix.com.br"; // Substitua pela chave real
-  const amazonWishlistUrl = "https://www.amazon.com.br/hz/wishlist/ls"; // Substitua pelo link real
+  const pixKey = "4074dd6d-9faa-4e8d-b944-bfb6a47277ba"; 
+  const amazonWishlistUrl = "https://www.amazon.com.br/hz/wishlist/ls";
 
   const handleCopyPix = () => {
     navigator.clipboard.writeText(pixKey);
@@ -27,7 +27,7 @@ const Gifts: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">redeem</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Lista de Presentes</h2>
-        <p className="text-stone-500">Sua presença é o nosso maior presente, mas se quiser nos mimar, aqui estão algumas formas:</p>
+        <p className="text-stone-500">Sua presença é o nosso maior presente, mas se quiser me mimar, aqui estão algumas formas:</p>
       </header>
 
       {/* PIX Section */}
@@ -38,7 +38,7 @@ const Gifts: React.FC = () => {
           </div>
         </div>
         <h3 className="font-serif text-2xl font-bold text-[#2c1810] mb-2">Presente via PIX</h3>
-        <p className="text-sm text-stone-600 mb-6">Se preferir nos presentear com qualquer valor, você pode usar nossa chave PIX abaixo:</p>
+        <p className="text-sm text-stone-600 mb-6">Se preferir me presentear com qualquer valor, você pode usar a chave PIX abaixo:</p>
         
         <div className="relative group">
           <div className="bg-[#f2efe9] p-4 rounded-xl border-2 border-dashed border-primary/30 font-mono text-sm break-all text-stone-700 mb-4 select-all">
@@ -87,18 +87,14 @@ const Gifts: React.FC = () => {
               </div>
               <div className="flex-grow">
                 <h4 className="text-[#2c1810] font-bold text-base leading-tight">{gift.name}</h4>
-                <p className="text-stone-500 text-xs mt-1 italic">Disponível em diversas lojas</p>
+                
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      <div className="bg-primary/5 p-6 rounded-3xl border border-primary/10 mb-10 text-center">
-        <p className="text-sm text-[#2c1810] leading-relaxed italic">
-          "O melhor presente é compartilhar este novo capítulo com vocês!"
-        </p>
-      </div>
+      
 
       <BohoButton label="Voltar ao Início" icon="arrow_back" variant="secondary" to="/" />
     </div>
