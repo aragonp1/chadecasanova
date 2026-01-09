@@ -12,22 +12,22 @@ const STORY_SECTIONS: StorySection[] = [
   {
     title: "O Início do Sonho",
     text: "Tudo começou quando eu deixei Itaitinga para encarar o desafio da faculdade em Fortaleza. Vivi o clichê de morar de aluguel no Benfica: uma fase de descobertas, mas também de muita saudade de casa. Foi ali, entre uma aula e outra, que nasceu uma promessa para mim mesma: um dia, eu teria um lugar que fosse inteiramente meu.",
-    imageUrl: "img/img-story1.jpeg"
+    imageUrl: "https://i.ibb.co/j9G113L3/img-story1.jpg"
   },
   {
     title: "A Escolha do Lugar",
     text: "Não foi uma busca rápida. Eu queria o melhor dos dois mundos: estar perto da rotina do meu trabalho atual, mas sem ficar longe do colo da minha família em Itaitinga. Eu procurava um lugar que não fosse apenas um endereço, mas que fizesse sentido para a vida que eu queria construir.",
-    imageUrl: "img/img-story2.JPG"
+    imageUrl: "https://i.ibb.co/My9g0G4S/img-story2.jpg"
   },
   {
     title: "Cada Detalhe Importa",
     text: "Quem me conhece sabe que eu presto atenção em tudo! Tinha que ter academia por perto para manter o ritmo e um mercadinho para facilitar o dia a dia. Mas confesso: o que me ganhou de verdade foi descobrir que tinha um restaurante com o meu espetinho favorito logo ali do lado. 😂 Afinal, a felicidade mora nos detalhes (e no espetinho bem feito!).",
-    imageUrl: "img/img-story3.JPG"
+    imageUrl: "https://i.ibb.co/qMSxxgwz/img-story3.jpg"
   },
   {
     title: "Finalmente, Lar",
     text: "Hoje, eu não abro mais uma porta que é emprestada. Eu abro a porta da minha conquista. Olhar para esse apartamento e saber que cada pedacinho dele representa o meu esforço é a sensação mais gratificante do mundo.",
-    imageUrl: "img/img-story4.JPG"
+    imageUrl: "https://i.ibb.co/6cbCZFXk/img-story4.jpg"
   }
 ];
 
