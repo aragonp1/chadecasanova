@@ -11,23 +11,23 @@ interface StorySection {
 const STORY_SECTIONS: StorySection[] = [
   {
     title: "O Início do Sonho",
-    text: "Tudo começou com um desejo guardado no coração. A vontade de ter um cantinho para chamar de meu, onde eu pudesse colocar minha personalidade em cada centímetro.",
-    imageUrl: "https://picsum.photos/600/800?random=21"
+    text: "Tudo começou quando eu deixei Itaitinga para encarar o desafio da faculdade em Fortaleza. Vivi o clichê de morar de aluguel no Benfica: uma fase de descobertas, mas também de muita saudade de casa. Foi ali, entre uma aula e outra, que nasceu uma promessa para mim mesma: um dia, eu teria um lugar que fosse inteiramente meu.",
+    imageUrl: "img/img-story1.jpeg"
   },
   {
     title: "A Escolha do Lugar",
-    text: "Depois de muita procura e muitos 'quase', finalmente encontrei o lugar que me fez sentir em casa no primeiro passo. Sabia que ali construiria memórias inesquecíveis.",
-    imageUrl: "https://picsum.photos/600/800?random=22"
+    text: "Não foi uma busca rápida. Eu queria o melhor dos dois mundos: estar perto da rotina do meu trabalho atual, mas sem ficar longe do colo da minha família em Itaitinga. Eu procurava um lugar que não fosse apenas um endereço, mas que fizesse sentido para a vida que eu queria construir.",
+    imageUrl: "img/img-story2.JPG"
   },
   {
     title: "Cada Detalhe Importa",
-    text: "A fase das reformas e decoração foi intensa, mas gratificante. Escolher cada cor, cada móvel e cada planta foi como pintar um quadro que eu viveria dentro.",
-    imageUrl: "https://picsum.photos/600/800?random=23"
+    text: "Quem me conhece sabe que eu presto atenção em tudo! Tinha que ter academia por perto para manter o ritmo e um mercadinho para facilitar o dia a dia. Mas confesso: o que me ganhou de verdade foi descobrir que tinha um restaurante com o meu espetinho favorito logo ali do lado. 😂 Afinal, a felicidade mora nos detalhes (e no espetinho bem feito!).",
+    imageUrl: "img/img-story3.JPG"
   },
   {
     title: "Finalmente, Lar",
-    text: "Hoje abro as portas para compartilhar essa alegria com vocês. Mais do que paredes, este é o lugar onde o amor e a amizade sempre terão assento à mesa.",
-    imageUrl: "https://picsum.photos/600/800?random=24"
+    text: "Hoje, eu não abro mais uma porta que é emprestada. Eu abro a porta da minha conquista. Olhar para esse apartamento e saber que cada pedacinho dele representa o meu esforço é a sensação mais gratificante do mundo.",
+    imageUrl: "img/img-story4.JPG"
   }
 ];
 
@@ -62,7 +62,7 @@ const Trajectory: React.FC = () => {
 
               {/* Image with Arch Mask */}
               <div className="w-full px-4 mb-4">
-                <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-xl ring-4 ring-white/50">
+                <div className="relative w-full aspect-[3/4] rounded-3xl overflow-hidden shadow-xl ring-4 ring-white/50">
                   <img 
                     src={section.imageUrl} 
                     alt={section.title} 
