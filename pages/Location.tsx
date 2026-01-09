@@ -3,7 +3,7 @@ import React from 'react';
 import BohoButton from '../components/BohoButton';
 
 const Location: React.FC = () => {
-  const address = "Rua das Flores, 123 - Jardim das Orquídeas, São Paulo - SP";
+  const address = "Rua Pedro Lopes, 482 - Guajeru, Fortaleza - CE, 60843-290";
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
   return (
@@ -13,7 +13,7 @@ const Location: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">location_on</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Local do Evento</h2>
-        <p className="text-olive font-medium">Estamos ansiosos para te receber!</p>
+        <p className="text-olive font-medium">Estou ansiosa para receber vocês 😊</p>
       </header>
 
       <div className="w-full bg-white/40 backdrop-blur-sm p-8 rounded-3xl border border-stone-200 shadow-xl mb-10 text-left">
@@ -30,22 +30,17 @@ const Location: React.FC = () => {
             <span className="material-symbols-outlined text-primary mt-1">calendar_month</span>
             <div>
               <h4 className="font-bold text-[#2c1810]">Data</h4>
-              <p className="text-stone-600">Sábado, 21 de Outubro às 16:00h</p>
+              <p className="text-stone-600">Sábado, 14 de Março às 16:00h</p>
             </div>
           </div>
 
-          <div className="flex items-start gap-4">
-            <span className="material-symbols-outlined text-primary mt-1">info</span>
-            <div>
-              <h4 className="font-bold text-[#2c1810]">Traje</h4>
-              <p className="text-stone-600">Esporte Fino / Confortável</p>
-            </div>
-          </div>
         </div>
+
+        
 
         <div className="mt-8 h-48 rounded-xl bg-stone-100 overflow-hidden relative group">
            <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.197472016487!2d-46.65889782466986!3d-23.561349178798516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8da173997%3A0x633285741f02f90!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.9143537589093!2d-38.47887578941148!3d-3.8285438961292004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7c74500276daf31%3A0x45fefdc58216eb3f!2sResidencial%20ap%C3%AA%20Messejana!5e0!3m2!1spt-BR!2sbr!4v1767988092041!5m2!1spt-BR!2sbr" 
             width="100%" 
             height="100%" 
             style={{ border: 0 }} 
