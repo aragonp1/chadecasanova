@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
         <p className="text-xs text-olive font-semibold tracking-wider uppercase">Developed by Alisson Aragão</p>
         <div className="flex gap-6">
           <a 
-            href="https://github.com" 
+            href="https://github.com/aragonp1" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-stone-400 hover:text-primary transition-colors duration-200"
@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
             </svg>
           </a>
           <a 
-            href="https://linkedin.com" 
+            href="https://www.linkedin.com/in/alissonaragao/" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-stone-400 hover:text-primary transition-colors duration-200"
