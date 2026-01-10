@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="w-full py-8 mt-auto bg-white/40 backdrop-blur-sm border-t border-stone-200 z-10">
       <div className="container mx-auto px-4 flex flex-col items-center justify-center gap-3">
-        <p className="text-xs text-olive font-semibold tracking-wider uppercase">Developed by Alisson Aragão</p>
+        <p className="text-xs text-olive font-semibold tracking-wider uppercase">Desenvolvido por Alisson Aragão</p>
         <div className="flex gap-6">
           <a 
             href="https://github.com/aragonp1" 
