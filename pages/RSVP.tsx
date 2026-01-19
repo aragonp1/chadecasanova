@@ -109,7 +109,7 @@ const RSVP: React.FC = () => {
     <div className="animate-fade-in pb-20">
       <header className="text-center mb-10">
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Confirmar Presença</h2>
-        <p className="text-stone-500">Por favor, confirme até o dia 10 de Outubro</p>
+        <p className="text-stone-500">Por favor, confirme até o <b>dia 28 de Fevereiro</b></p>
       </header>
 
       <form onSubmit={handleSubmit} className="bg-white/40 backdrop-blur-sm p-8 rounded-3xl border border-stone-200 shadow-xl space-y-6 mb-16">
@@ -121,7 +121,7 @@ const RSVP: React.FC = () => {
             className="w-full bg-[#f2efe9] border-stone-200 rounded-xl px-4 py-3 focus:ring-primary focus:border-primary transition-all"
             value={formData.name}
             onChange={e => setFormData({...formData, name: e.target.value})}
-            placeholder="Ex: Maria Oliveira"
+            placeholder="Seu nome aqui"
           />
         </div>
 
@@ -143,7 +143,7 @@ const RSVP: React.FC = () => {
             rows={3}
             value={formData.message}
             onChange={e => setFormData({...formData, message: e.target.value})}
-            placeholder="Deixe um recado para a Dayane..."
+            placeholder="Deixe um recado para mim..."
           />
         </div>
 
