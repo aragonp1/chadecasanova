@@ -90,6 +90,9 @@ const RSVP: React.FC = () => {
   if (submitted) {
     return (
       <div className="flex flex-col items-center text-center animate-fade-in py-12">
+         <div className="mb-4 text-primary">
+          <span className="material-symbols-outlined text-6xl">redeem</span>
+        </div>
         <div className="mb-6 text-primary">
           <span className="material-symbols-outlined text-7xl">celebration</span>
         </div>
