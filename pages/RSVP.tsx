@@ -109,7 +109,7 @@ const RSVP: React.FC = () => {
     <div className="animate-fade-in pb-20">
       <header className="text-center mb-10">
         <div className="mb-4 text-primary">
-          <span className="material-symbols-outlined text-6xl">redeem</span>
+          <span className="material-symbols-outlined text-6xl">check_circle</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Confirmar Presença</h2>
         <p className="text-stone-500">Por favor, confirme até o <b>dia 28 de Fevereiro</b></p>
