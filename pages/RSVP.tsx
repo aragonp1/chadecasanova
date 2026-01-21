@@ -90,9 +90,6 @@ const RSVP: React.FC = () => {
   if (submitted) {
     return (
       <div className="flex flex-col items-center text-center animate-fade-in py-12">
-         <div className="mb-4 text-primary">
-          <span className="material-symbols-outlined text-6xl">redeem</span>
-        </div>
         <div className="mb-6 text-primary">
           <span className="material-symbols-outlined text-7xl">celebration</span>
         </div>
@@ -111,6 +108,9 @@ const RSVP: React.FC = () => {
   return (
     <div className="animate-fade-in pb-20">
       <header className="text-center mb-10">
+        <div className="mb-4 text-primary">
+          <span className="material-symbols-outlined text-6xl">redeem</span>
+        </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Confirmar Presença</h2>
         <p className="text-stone-500">Por favor, confirme até o <b>dia 28 de Fevereiro</b></p>
       </header>
