@@ -36,7 +36,7 @@ const Home: React.FC = () => {
         <div className="relative w-full aspect-[4/5] rounded-t-[10rem] rounded-b-2xl overflow-hidden shadow-2xl ring-4 ring-white">
           <div 
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105" 
-            style={{ backgroundImage: `url('estiloHome')` }}
+            style={estiloHome}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
         </div>
