@@ -6,9 +6,7 @@ const Home: React.FC = () => {
   return (
     <div className="flex flex-col items-center animate-fade-in">
       <header className="w-full text-center flex flex-col items-center mb-8">
-        <div className="mb-4 text-primary animate-bounce">
-
-          <img src="https://i.ibb.co/LzGdb9Hp/b9067b33984ae88ed69cdb4b04bbb614.jpg" alt="b9067b33984ae88ed69cdb4b04bbb614" border="0">
+        <div className="mb-4 text-primary animate-bounce" style={{backgroundImagem: `url('https://i.ibb.co/LzGdb9Hp/b9067b33984ae88ed69cdb4b04bbb614.jpg')`}}>
           {/* <span className="material-symbols-outlined text-5xl">favorite_sharp</span> */}
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
