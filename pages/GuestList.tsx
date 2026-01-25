@@ -83,11 +83,12 @@ const GuestList: React.FC = () => {
         )}
       </section>
 
-      <BohoButton label="Acessar Convite" variant="primary" to="/" />
+      {/* <BohoButton label="Acessar Convite" variant="primary" to="/" /> */}
     </div>
   );
 };
 
 export default GuestList;
+
 
 
