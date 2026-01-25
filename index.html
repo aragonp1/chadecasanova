@@ -35,9 +35,24 @@
             background-size: 24px 24px;
             opacity: 0.08;
         }
-        .arch-mask {
-            border-top-left-radius: 10rem;
-            border-top-right-radius: 10rem;
+         @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeSlideUp 0.6s ease-out forwards;
+        }
+
+        /* Suaviza o scroll geral */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 <script type="importmap">
