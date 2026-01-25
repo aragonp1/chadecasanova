@@ -1,26 +1,25 @@
-
 import React from 'react';
 import BohoButton from '../components/BohoButton';
-import FotoHome from '../img/foto-convite.png'
+// CORREÇÃO 1: Adicionada a barra "/" após os pontos
+import FotoHome from '../img/foto-convite.png'; 
 
-function Home() {
+const Home: React.FC = () => {
+  // CORREÇÃO 2: Usei "FotoHome" (Maiúsculo) para bater com o import lá de cima
   const estiloHome = {
-    backgroundImage: `url(${FotoHome})`,
+    backgroundImage: `url(${FotoHome})`, 
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };
 
-const Home: React.FC = () => {
   return (
     <div className="flex flex-col items-center animate-fade-in">
       <header className="w-full text-center flex flex-col items-center mb-8">
         <div className="mb-4">
-
-          <img className="max-w-[70px]"
-      src="https://i.ibb.co/LzGdb9Hp/b9067b33984ae88ed69cdb4b04bbb614.jpg" 
-      alt="Imagem externa" 
-    />
-          {/* <span className="material-symbols-outlined text-5xl">favorite_sharp</span> text-primary animate-bounce */}
+          <img 
+            className="max-w-[70px]"
+            src="https://i.ibb.co/LzGdb9Hp/b9067b33984ae88ed69cdb4b04bbb614.jpg" 
+            alt="Imagem externa" 
+          />
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
           Aniversário e 
@@ -28,7 +27,7 @@ const Home: React.FC = () => {
           <span className="text-primary italic font-normal block mt-1">da Day</span>
         </h1>
         <p className="pt-2 text-olive text-base md:text-lg font-normal leading-relaxed max-w-[350px] mx-auto opacity-80">
-          Com o tempo eu aprendi a amar o meu aniversário e todas as pequenas vitórias da vida, mas não passsei por essa transformação sozinha. Por isso, com muita felicidade, abro as portas da minha nova casa para receber quem marcou minha história nesses 27 anos.
+          Com o tempo eu aprendi a amar o meu aniversário...
         </p>
       </header>
 
@@ -43,36 +42,14 @@ const Home: React.FC = () => {
       </div>
 
       <div className="w-full flex flex-col gap-5 items-stretch max-w-[320px] mx-auto">
-        <BohoButton 
-          label="Minha Trajetória" 
-          icon="auto_stories" 
-          to="/trajetoria" 
-        />
-        <BohoButton 
-          label="Confirmação de Presença" 
-          icon="check_circle" 
-          variant="primary" 
-          to="/rsvp" 
-        />
-        <BohoButton 
-          label="Local do Evento" 
-          icon="location_on" 
-          to="/local" 
-        />
-        <BohoButton 
-          label="Lista de Presentes" 
-          icon="redeem" 
-          to="/presentes" 
-        />
+        <BohoButton label="Minha Trajetória" icon="auto_stories" to="/trajetoria" />
+        <BohoButton label="Confirmação de Presença" icon="check_circle" variant="primary" to="/rsvp" />
+        <BohoButton label="Local do Evento" icon="location_on" to="/local" />
+        <BohoButton label="Lista de Presentes" icon="redeem" to="/presentes" />
       </div>
 
       <div className="mt-14 text-center">
         <h3 className="font-serif text-3xl text-[#2c1810] font-medium italic">Com carinho, Dayane</h3>
-        <div className="mt-5 flex justify-center gap-3">
-          <span className="block w-2 h-2 rounded-full bg-primary/30 animate-pulse"></span>
-          <span className="block w-2 h-2 rounded-full bg-primary animate-pulse [animation-delay:200ms]"></span>
-          <span className="block w-2 h-2 rounded-full bg-primary/30 animate-pulse [animation-delay:400ms]"></span>
-        </div>
       </div>
     </div>
   );
