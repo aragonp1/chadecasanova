@@ -9,9 +9,20 @@ import Trajectory from './pages/Trajectory';
 import GuestList from './pages/GuestList';
 import Layout from './components/Layout';
 
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
+};
+
 const App: React.FC = () => {
   return (
     <Router>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -25,5 +36,6 @@ const App: React.FC = () => {
     </Router>
   );
 };
+
 
 export default App;
