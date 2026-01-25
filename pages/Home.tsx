@@ -11,7 +11,7 @@ const Home: React.FC = () => {
           <img 
       src="https://i.ibb.co/LzGdb9Hp/b9067b33984ae88ed69cdb4b04bbb614.jpg" 
       alt="Imagem externa" 
-    />>
+    />
           {/* <span className="material-symbols-outlined text-5xl">favorite_sharp</span> text-primary animate-bounce */}
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
