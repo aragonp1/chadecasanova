@@ -8,7 +8,7 @@ const Home: React.FC = () => {
       <header className="w-full text-center flex flex-col items-center mb-8">
         <div className="mb-4">
 
-          <img 
+          <img className="max-w-[70px]"
       src="https://i.ibb.co/LzGdb9Hp/b9067b33984ae88ed69cdb4b04bbb614.jpg" 
       alt="Imagem externa" 
     />
