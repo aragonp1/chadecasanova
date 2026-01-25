@@ -12,7 +12,7 @@ const STORY_SECTIONS: StorySection[] = [
   {
     title: "O Início de Tudo",
     text: "Em 1999, na cidade de Itaitinga, nascia Maria Dayane de Sousa Gomes. A mais velha dos 5 irmãos, criada pelos avós e pela madrinha desde os 4 anos, 2 anos adiantada na escola, nerd de carteirinha e igualmente tímida e exibida. Depois de muitas personalidades, vidas, amores, crises, aventuras, dívidas, mais experiências do que o esperado mas, definitivamente, menos do que eu ainda quero viver, hoje eu completo 27 anos. Além de celebrar todos os finais que não aconteceram, estou celebrando uma conquista que jamais imaginei ser capaz, o famoso sonho da casa própria. Vem comigo que vou te contar um pouquinho desse processo.",
-    imageUrl: "https://i.ibb.co/xS6g3rSR/Whats-App-Image-2026-01-25-at-20-32-06.jpg"
+    imageUrl: "https://i.ibb.co/7xCYVTL8/Whats-App-Image-2026-01-25-at-20-32-06.jpg"
   },
   {
     title: "A Escolha do Lugar",
