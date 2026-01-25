@@ -15,6 +15,11 @@ const STORY_SECTIONS: StorySection[] = [
     imageUrl: "https://i.ibb.co/7xCYVTL8/Whats-App-Image-2026-01-25-at-20-32-06.jpg"
   },
   {
+    title: "O Início do Sonho",
+    text: "Tudo começou quando eu deixei Itaitinga para encarar o desafio da faculdade em Fortaleza. Vivi o clichê de morar de aluguel no Benfica: uma fase de descobertas, mas também de muita saudade de casa. Foi ali, entre uma aula e outra, que nasceu uma promessa para mim mesma: um dia, eu teria um lugar que fosse inteiramente meu.",
+    imageUrl: "https://i.ibb.co/PJLsLw1/Whats-App-Image-2026-01-25-at-20-39-02.jpg"
+  },
+  {
     title: "A Escolha do Lugar",
     text: "Não foi uma busca rápida. Eu queria o melhor dos dois mundos: estar perto da rotina do meu trabalho atual, mas sem ficar longe do colo da minha família em Itaitinga. Eu procurava um lugar que não fosse apenas um endereço, mas que fizesse sentido para a vida que eu queria construir.",
     imageUrl: "https://i.ibb.co/MDCwCFfr/img-story2.jpg"
