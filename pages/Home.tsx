@@ -10,7 +10,7 @@ const Home: React.FC = () => {
           <span className="material-symbols-outlined text-5xl">potted_plant</span>
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
-          Aniversário e Chá de Casa Nova<br/>
+          Aniversário e<br>Chá de Casa Nova<br/>
           <span className="text-primary italic font-normal block mt-1">da Day</span>
         </h1>
         <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
