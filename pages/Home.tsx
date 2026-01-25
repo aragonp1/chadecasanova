@@ -10,11 +10,11 @@ const Home: React.FC = () => {
           <span className="material-symbols-outlined text-5xl">potted_plant</span>
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
-          Aniversário e<br>Chá de Casa Nova
+          "Aniversário e<br>Chá de Casa Nova"
           <span className="text-primary italic font-normal block mt-1">da Day</span>
         </h1>
         <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
-          Com o tempo eu aprendi a amar o meu aniversário e todas as pequenas vitórias da vida, parte dessa transformação veio do amor de cada um que passou pela minha vida. E é por isso que com muita felicidade abro as portas da minha nova casa para receber as pessoas que marcaram minha história nos meus 27 anos. Meus 27 anos
+          "Com o tempo eu aprendi a amar o meu aniversário e todas as pequenas vitórias da vida, parte dessa transformação veio do amor de cada um que passou pela minha vida. E é por isso que com muita felicidade abro as portas da minha nova casa para receber as pessoas que marcaram minha história nos meus 27 anos."
         </p>
       </header>
 
