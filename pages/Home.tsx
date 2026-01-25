@@ -49,7 +49,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="mt-14 text-center">
-        <h3 className="font-serif text-3xl text-[#2c1810] font-medium italic">Com carinho, Dayane</h3>
+        <h3 className="font-serif text-3xl text-[#2c1810] font-medium italic">Espero por você!</h3>
       </div>
     </div>
   );
