@@ -20,7 +20,7 @@ const Home: React.FC = () => {
           <span className="text-primary italic font-normal block mt-1">da Day</span>
         </h1>
         <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[350px] mx-auto opacity-80">
-          Com o tempo eu aprendi a amar o meu aniversário e todas as pequenas vitórias da vida, mas não passsei por essa transformação sozinha. Por isso que, com muita felicidade, abro as portas da minha nova casa para receber quem marcou minha história nesses 27 anos.
+          Com o tempo eu aprendi a amar o meu aniversário e todas as pequenas vitórias da vida, mas não passsei por essa transformação sozinha. Por isso, com muita felicidade, abro as portas da minha nova casa para receber quem marcou minha história nesses 27 anos.
         </p>
       </header>
 
