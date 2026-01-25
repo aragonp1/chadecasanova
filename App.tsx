@@ -6,6 +6,7 @@ import RSVP from './pages/RSVP';
 import Location from './pages/Location';
 import Gifts from './pages/Gifts';
 import Trajectory from './pages/Trajectory';
+import GuestList from './pages/GuestList';
 import Layout from './components/Layout';
 
 const App: React.FC = () => {
@@ -18,6 +19,7 @@ const App: React.FC = () => {
           <Route path="/local" element={<Location />} />
           <Route path="/presentes" element={<Gifts />} />
           <Route path="/trajetoria" element={<Trajectory />} />
+          <Route path="/confirmados" element={<GuestList />} />
         </Routes>
       </Layout>
     </Router>
