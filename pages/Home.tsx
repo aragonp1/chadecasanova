@@ -7,7 +7,7 @@ const Home: React.FC = () => {
     <div className="flex flex-col items-center animate-fade-in">
       <header className="w-full text-center flex flex-col items-center mb-8">
         <div className="mb-4 text-primary animate-bounce">
-          <span className="material-symbols-outlined text-5xl">butterfly</span>
+          <span className="material-symbols-outlined text-5xl">favorite</span>
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
           Aniversário e 
