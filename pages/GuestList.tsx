@@ -56,9 +56,6 @@ const GuestList: React.FC = () => {
         ) : confirmations.length === 0 ? (
           <div className="text-center py-16 bg-white/20 rounded-3xl border border-dashed border-stone-300">
             <p className="text-stone-400 italic">Ainda não temos confirmações.</p>
-            <div className="mt-6 max-w-[200px] mx-auto">
-              <BohoButton label="Confirmar Agora" icon="check" to="/rsvp" variant="primary" />
-            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4">
@@ -86,10 +83,11 @@ const GuestList: React.FC = () => {
         )}
       </section>
 
-      <BohoButton label="Acessar Convite" icon="arrow_back" variant="secondary" to="/" />
+      <BohoButton label="Acessar Convite" variant="primary" to="/" />
     </div>
   );
 };
 
 export default GuestList;
+
 
