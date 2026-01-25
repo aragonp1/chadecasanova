@@ -7,14 +7,14 @@ const Home: React.FC = () => {
     <div className="flex flex-col items-center animate-fade-in">
       <header className="w-full text-center flex flex-col items-center mb-8">
         <div className="mb-4 text-primary animate-bounce">
-          <span className="material-symbols-outlined text-5xl">potted_plant</span>
+          <span className="material-symbols-outlined text-5xl">butterfly</span>
         </div>
         <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
           Aniversário e 
           <span className="block">Chá de Casa Nova</span>
           <span className="text-primary italic font-normal block mt-1">da Day</span>
         </h1>
-        <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
+        <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[350px] mx-auto opacity-80">
           Com o tempo eu aprendi a amar o meu aniversário e todas as pequenas vitórias da vida, mas não passsei por essa transformação sozinha. Por isso que, com muita felicidade, abro as portas da minha nova casa para receber quem marcou minha história nesses 27 anos.
         </p>
       </header>
