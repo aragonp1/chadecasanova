@@ -15,17 +15,17 @@ const STORY_SECTIONS: StorySection[] = [
     imageUrl: "https://i.ibb.co/7xCYVTL8/Whats-App-Image-2026-01-25-at-20-32-06.jpg"
   },
   {
-    title: "O Início do Sonho",
-    text: "Tudo começou quando eu deixei Itaitinga para encarar o desafio da faculdade em Fortaleza. Vivi o clichê de morar de aluguel no Benfica: uma fase de descobertas, mas também de muita saudade de casa. Foi ali, entre uma aula e outra, que nasceu uma promessa para mim mesma: um dia, eu teria um lugar que fosse inteiramente meu.",
+    title: "Começando a Sonhar",
+    text: "Eu sempre odiei morar afastada de tudo, ter que levar 2 horas e 30 reais para estudar, trabalhar e sair com os amigos. Durante a pandemia, fiz uma promessa para mim mesma de que quando (na época era um "se") tudo voltasse eu iria morar em Fortaleza. Dito e feito, em 2021 passei como Jovem Aprendiz em uma grande empresa e com menos de um salário mínimo e um sonho aluguei um kitnet no Benfica. Eu amava minha Marechal, mas com o tempo ela não era mais suficiente e com uma regra de 3 básica percebi que conseguia sim comprar meu próprio apartamento. ",
     imageUrl: "https://i.ibb.co/PJLsLw1/Whats-App-Image-2026-01-25-at-20-39-02.jpg"
   },
   {
-    title: "A Escolha do Lugar",
+    title: "Cada Detalhe Importa",
     text: "Não foi uma busca rápida. Eu queria o melhor dos dois mundos: estar perto da rotina do meu trabalho atual, mas sem ficar longe do colo da minha família em Itaitinga. Eu procurava um lugar que não fosse apenas um endereço, mas que fizesse sentido para a vida que eu queria construir.",
     imageUrl: "https://i.ibb.co/MDCwCFfr/img-story2.jpg"
   },
   {
-    title: "Cada Detalhe Importa",
+    title: "Finalmente, Lar",
     text: "Quem me conhece sabe que eu presto atenção em tudo! Tinha que ter academia por perto para manter o ritmo e um mercadinho para facilitar o dia a dia. Mas confesso: o que me ganhou de verdade foi descobrir que tinha um restaurante com o meu espetinho favorito logo ali do lado. 😂 Afinal, a felicidade mora nos detalhes (e no espetinho bem feito!).",
     imageUrl: "https://i.ibb.co/sJ93Mhy7/img-story3.jpg"
   },
