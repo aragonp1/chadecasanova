@@ -1,11 +1,11 @@
 
 import React from 'react';
 import BohoButton from '../components/BohoButton';
-import FotoHome from '..img/foto-convite.png'
+import FotoHome from '../img/foto-convite.png'
 
 function Home() {
   const estiloHome = {
-    backgroundImage: `url(${fotoHome})`,
+    backgroundImage: `url(${FotoHome})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   };
