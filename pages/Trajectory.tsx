@@ -16,7 +16,7 @@ const STORY_SECTIONS: StorySection[] = [
   },
   {
     title: "Começando a Sonhar",
-    text: "Eu sempre odiei morar afastada de tudo, ter que levar 2 horas e 30 reais para estudar, trabalhar e sair com os amigos. Durante a pandemia, fiz uma promessa para mim mesma de que quando (na época era um "se") tudo voltasse eu iria morar em Fortaleza. Dito e feito, em 2021 passei como Jovem Aprendiz em uma grande empresa e com menos de um salário mínimo e um sonho aluguei um kitnet no Benfica. Eu amava minha Marechal, mas com o tempo ela não era mais suficiente e com uma regra de 3 básica percebi que conseguia sim comprar meu próprio apartamento.",
+    text: "Eu sempre odiei morar afastada de tudo, ter que levar 2 horas e 30 reais para estudar, trabalhar e sair com os amigos. Durante a pandemia, fiz uma promessa para mim mesma de que quando (na época era um se) tudo voltasse eu iria morar em Fortaleza. Dito e feito, em 2021 passei como Jovem Aprendiz em uma grande empresa e com menos de um salário mínimo e um sonho aluguei um kitnet no Benfica. Eu amava minha Marechal, mas com o tempo ela não era mais suficiente e com uma regra de 3 básica percebi que conseguia sim comprar meu próprio apartamento.",
     imageUrl: "https://i.ibb.co/PJLsLw1/Whats-App-Image-2026-01-25-at-20-39-02.jpg"
   },
   {
