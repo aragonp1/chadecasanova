@@ -163,7 +163,7 @@ const Gifts: React.FC = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
           style={{ 
-            backgroundImage: "url('./planta.jpg')",
+            backgroundImage: "url('https://i.ibb.co/TDfPLs27/img-story3-1.jpg')",
             backgroundColor: "#f3f3f3"
           }}
         ></div>
