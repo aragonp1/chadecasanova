@@ -28,7 +28,7 @@ const Gifts: React.FC = () => {
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Mimos e Desejos</h2>
         <p className="text-stone-500">Aqui vão algumas regras sobre os presentes:</p>
-        <ul className="text-stone-500">
+        <ul className="text-stone-500 list-disc">
         <li>Sua presença é o item mais importante que espero receber</li>
         <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
         <li>Seu mimo pode ser tanto na forma de um desses itens como o famoso PIX</li>
