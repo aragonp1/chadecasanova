@@ -109,7 +109,7 @@ const RSVP: React.FC = () => {
             className="w-full bg-[#f2efe9] border-stone-200 rounded-xl px-4 py-3 focus:ring-primary transition-all"
             value={formData.name}
             onChange={e => setFormData({...formData, name: e.target.value})}
-            placeholder="Ex: Maria Dayane"
+            placeholder="Ex: Dayane Sousa"
           />
         </div>
 
