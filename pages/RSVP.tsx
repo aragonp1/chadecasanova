@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import BohoButton from '../components/BohoButton';
-import { RSVPFormData, RSVPConfirmation } from '../types';
+import { RSVPFormData } from '../types';
 
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOlGVk7obyKiKckGMsN5mXBnYAag6QlZeAIh0I0cQW6zCZjH5JEyiwNl0Gwd0vUnyfhg/exec";
 
@@ -43,7 +43,7 @@ const RSVP: React.FC = () => {
       });
       setAiGreeting(response.text || 'Obrigada por confirmar! Mal posso esperar para te ver.');
     } catch (error) {
-      setAiGreeting('Essa é mais uma memória que construiremos juntos!');
+      setAiGreeting('Obrigada por confirmar sua presença! Mal posso esperar para te ver.');
     }
   };
 
@@ -51,10 +51,15 @@ const RSVP: React.FC = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    const newConfirmation: RSVPConfirmation = {
-      ...formData,
-      id: crypto.randomUUID(),
-      timestamp: new Date().toLocaleString('pt-BR')
+    const payload = {
+      Horario_Registro: new Date().toLocaleString('pt-BR'),
+      Nome_Completo: formData.name,
+      Qtd_Extras: formData.companionsCount,
+      Nomes_Extras: formData.companionNames,
+      Tipo_Dieta: formData.dietary,
+      Dieta_Especial: formData.dietaryCustom || '',
+      Recado_Amor: formData.message || '',
+      Categoria_Info: 'rsvp'
     };
 
     try {
@@ -62,7 +67,7 @@ const RSVP: React.FC = () => {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newConfirmation)
+        body: JSON.stringify(payload)
       });
 
       await generateAIGreeting(formData.name);
@@ -86,6 +91,7 @@ const RSVP: React.FC = () => {
           "{aiGreeting}"
         </div>
         <div className="w-full flex flex-col gap-4 max-w-[320px]">
+          <BohoButton label="Ver Quem Mais Vai" icon="group" to="/confirmados" variant="primary" />
           <BohoButton label="Voltar ao Início" icon="arrow_back" variant="secondary" to="/" />
         </div>
       </div>
@@ -95,11 +101,8 @@ const RSVP: React.FC = () => {
   return (
     <div className="animate-fade-in pb-20">
       <header className="text-center mb-10">
-        <div className="mb-6 text-primary">
-          <span className="material-symbols-outlined text-7xl">check_circle</span>
-        </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Confirmar Presença</h2>
-        <p className="text-stone-500">Responder até Sábado 07/03, por pena 🙏</p>
+        <p className="text-stone-500">Por favor, confirme até o dia 10 de Outubro</p>
       </header>
 
       <form onSubmit={handleSubmit} className="bg-white/40 backdrop-blur-sm p-8 rounded-3xl border border-stone-200 shadow-xl space-y-6">
@@ -111,7 +114,7 @@ const RSVP: React.FC = () => {
             className="w-full bg-[#f2efe9] border-stone-200 rounded-xl px-4 py-3 focus:ring-primary transition-all"
             value={formData.name}
             onChange={e => setFormData({...formData, name: e.target.value})}
-            placeholder="Ex: Dayane Sousa"
+            placeholder="Seu nome"
           />
         </div>
 
