@@ -3,7 +3,8 @@ import React from 'react';
 import BohoButton from '../components/BohoButton';
 
 const Location: React.FC = () => {
-  const address = "Rua Pedro Lopes, 482 - Guajeru, Fortaleza - CE, 60843-290";
+  const address = "Rua Pedro Lopes, 482 - Guajeru";
+  const adress2 = "Fortaleza - CE, 60843-290"
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
   return (
@@ -23,6 +24,7 @@ const Location: React.FC = () => {
             <div>
               <h4 className="font-bold text-[#2c1810]">Endereço</h4>
               <p className="text-stone-600">{address}</p>
+              <p className="text-stone-600">{address2}</p>
               <p className="text-stone-600"><b>Sujeito a alteração até 07/03</b></p>
             
             </div>
