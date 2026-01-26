@@ -108,7 +108,7 @@ const Gifts: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">home_pin</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Lista de Presentes</h2>
-        <p className="text-stone-500 px-6">Aqui vão algumas regras sobre os peresentes 📋:</p>
+        <p className="text-stone-500 px-6">Aqui vão algumas regras sobre os presentes 📋:</p>
         <ul className="text-stone-500 px-6 text-left list-disc">
         <li>Sua presença é o item mais importante que espero receber</li>
         <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
