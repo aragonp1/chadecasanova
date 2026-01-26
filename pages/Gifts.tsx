@@ -11,7 +11,7 @@ const GIFT_IDEAS: Partial<GiftItem>[] = [
 
 const Gifts: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const pixKey = "068.262.493-40"; 
+  const pixKey = "4074dd6d-9faa-4e8d-b944-bfb6a47277ba"; 
   const amazonWishlistUrl = "https://www.amazon.com.br/hz/wishlist/ls";
 
   const handleCopyPix = () => {
