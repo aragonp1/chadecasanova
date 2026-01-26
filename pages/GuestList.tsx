@@ -5,20 +5,48 @@ import { RSVPConfirmation } from '../types';
 
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOlGVk7obyKiKckGMsN5mXBnYAag6QlZeAIh0I0cQW6zCZjH5JEyiwNl0Gwd0vUnyfhg/exec";
 
+interface GiftSelection {
+  itemName: string;
+  giverName: string;
+}
+
 const GuestList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [confirmations, setConfirmations] = useState<RSVPConfirmation[]>([]);
+  const [giftsByGiver, setGiftsByGiver] = useState<Record<string, string[]>>({});
 
-  const fetchConfirmations = async () => {
+  const fetchAllData = async () => {
     try {
       const response = await fetch(GOOGLE_SHEET_URL);
       if (!response.ok) throw new Error('Falha ao buscar dados');
       const data = await response.json();
       
-      if (Array.isArray(data)) {
-        const validData = data.filter((item: any) => item.name).reverse();
-        setConfirmations(validData);
+      let rsvps: RSVPConfirmation[] = [];
+      let gifts: GiftSelection[] = [];
+
+      // Ajusta conforme a estrutura retornada pelo Google Apps Script
+      if (data.rsvps) {
+        rsvps = data.rsvps;
+      } else if (Array.isArray(data)) {
+        rsvps = data.filter((item: any) => !item.type || item.type === 'rsvp');
       }
+
+      if (data.gifts) {
+        gifts = data.gifts;
+      } else if (Array.isArray(data)) {
+        gifts = data.filter((item: any) => item.type === 'gift');
+      }
+
+      // Mapeia presentes por nome de quem deu (ignorando maiúsculas/minúsculas)
+      const giftMap: Record<string, string[]> = {};
+      gifts.forEach(g => {
+        const nameKey = g.giverName.toLowerCase().trim();
+        if (!giftMap[nameKey]) giftMap[nameKey] = [];
+        giftMap[nameKey].push(g.itemName);
+      });
+
+      setConfirmations(rsvps.reverse());
+      setGiftsByGiver(giftMap);
     } catch (e) {
       console.error("Erro ao carregar lista:", e);
     } finally {
@@ -27,7 +55,7 @@ const GuestList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchConfirmations();
+    fetchAllData();
   }, []);
 
   const totalGuests = confirmations.reduce((sum, conf) => sum + 1 + (Number(conf.companionsCount) || 0), 0);
@@ -38,72 +66,101 @@ const GuestList: React.FC = () => {
         <div className="mb-4 text-primary">
           <span className="material-symbols-outlined text-6xl">group</span>
         </div>
-        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Convidados Confirmados</h2>
+        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Quem já confirmou</h2>
         <div className="inline-block bg-primary/10 px-4 py-1 rounded-full text-primary font-bold text-sm">
-          {totalGuests} {totalGuests === 1 ? 'pessoa confirmada' : 'pessoas confirmadas'}
+          {totalGuests} {totalGuests === 1 ? 'pessoa' : 'pessoas'} no total
         </div>
       </header>
 
       <section className="w-full space-y-6 mb-12">
         {isLoading ? (
           <div className="flex flex-col items-center py-20 gap-4">
-            <svg className="animate-spin h-10 w-10 text-primary" viewBox="0 0 24 24">
+            <svg className="animate-spin h-8 w-8 text-primary" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            <p className="text-stone-400 italic">Buscando convidados...</p>
+            <p className="text-stone-400 italic text-sm">Sincronizando com a nuvem...</p>
           </div>
         ) : confirmations.length === 0 ? (
           <div className="text-center py-16 bg-white/20 rounded-3xl border border-dashed border-stone-300">
-            <p className="text-stone-400 italic">Nenhuma confirmação ainda.</p>
+            <p className="text-stone-400 italic">Aguardando as primeiras confirmações.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {confirmations.map((conf) => (
-              <div key={conf.id} className="bg-white/60 backdrop-blur-sm p-6 rounded-3xl border border-stone-100 shadow-sm flex flex-col gap-3 transition-all hover:shadow-md">
-                <div className="flex justify-between items-start">
-                  <div className="flex-grow">
-                    <h4 className="font-bold text-[#2c1810] text-xl leading-tight">{conf.name}</h4>
-                    {conf.companionsCount > 0 && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {conf.companionNames.split(', ').map((cName, i) => (
-                          <span key={i} className="text-[11px] bg-stone-200 text-stone-600 px-2 py-0.5 rounded-lg font-medium">
-                            {cName}
+            {confirmations.map((conf) => {
+              const nameKey = conf.name.toLowerCase().trim();
+              const itemsChosen = giftsByGiver[nameKey] || [];
+              
+              return (
+                <div key={conf.id} className="bg-white/70 backdrop-blur-sm p-6 rounded-3xl border border-white shadow-sm flex flex-col gap-3 transition-all hover:shadow-md">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-bold text-[#2c1810] text-xl leading-tight">{conf.name}</h4>
+                        {itemsChosen.length > 0 && (
+                          <span className="material-symbols-outlined text-primary text-xl animate-pulse">redeem</span>
+                        )}
+                      </div>
+                      
+                      {conf.companionsCount > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {conf.companionNames.split(', ').map((cName, i) => (
+                            <span key={i} className="text-[10px] bg-stone-100 text-stone-500 px-2 py-0.5 rounded-lg font-bold border border-stone-200/50">
+                              {cName}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-right flex flex-col items-end shrink-0">
+                      <span className="text-[9px] text-stone-400 font-mono mb-1 uppercase tracking-tighter">
+                        {conf.timestamp?.split(' ')[0]}
+                      </span>
+                      <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-black">
+                        +{conf.companionsCount}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Detalhe do Presente Escolhido */}
+                  {itemsChosen.length > 0 && (
+                    <div className="bg-primary/5 p-3 rounded-2xl border border-primary/10 flex flex-col gap-1">
+                      <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Presente Escolhido:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {itemsChosen.map((item, i) => (
+                          <span key={i} className="text-xs font-bold text-[#2c1810] flex items-center gap-1">
+                            <span className="material-symbols-outlined text-xs">check_small</span>
+                            {item}
                           </span>
                         ))}
                       </div>
-                    )}
-                  </div>
-                  <div className="text-right flex flex-col items-end">
-                    <span className="text-[10px] text-stone-400 font-mono mb-1">{conf.timestamp?.split(' ')[0]}</span>
-                    <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full font-bold">
-                      +{conf.companionsCount}
-                    </span>
-                  </div>
-                </div>
+                    </div>
+                  )}
 
-                <div className="flex items-center gap-2 py-2 border-y border-stone-100/50">
-                  <span className="material-symbols-outlined text-primary text-sm">restaurant</span>
-                  <p className="text-xs text-stone-600">
-                    <span className="font-bold">Restrição:</span> {conf.dietary === 'Outros' ? conf.dietaryCustom : conf.dietary}
-                  </p>
-                </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-stone-100/50">
+                    <span className="material-symbols-outlined text-olive text-sm">nutrition</span>
+                    <p className="text-[11px] text-stone-500">
+                      <span className="font-bold">Dieta:</span> {conf.dietary === 'Outros' ? conf.dietaryCustom : conf.dietary}
+                    </p>
+                  </div>
 
-                {conf.message && (
-                  <p className="text-sm text-stone-500 italic leading-relaxed pl-3 border-l-2 border-primary/20">
-                    "{conf.message}"
-                  </p>
-                )}
-              </div>
-            ))}
+                  {conf.message && (
+                    <p className="text-xs text-stone-400 italic leading-relaxed pl-3 border-l-2 border-primary/10 bg-stone-50/50 py-1 rounded-r-lg">
+                      "{conf.message}"
+                    </p>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
 
-      <BohoButton label="Acessar Convite" variant="secondary" to="/" />
+      <div className="flex flex-col gap-4 max-w-[320px] mx-auto">
+        <BohoButton label="Voltar ao Início" icon="arrow_back" variant="secondary" to="/" />
+      </div>
     </div>
   );
 };
 
 export default GuestList;
-
