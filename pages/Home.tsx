@@ -45,7 +45,7 @@ const Home: React.FC = () => {
         <BohoButton label="Minha Trajetória" icon="auto_stories" to="/trajetoria" />
         <BohoButton label="Informações do Evento" icon="location_on" to="/local" />
         <BohoButton label="Confirmar Presença" icon="check_circle" variant="primary" to="/rsvp" /> 
-        <BohoButton label="Lista de Presentes" icon="redeem" to="/presentes" />
+        <BohoButton label="Me da 1 real" icon="redeem" to="/presentes" />
       </div>
 
       <div className="mt-14 text-center">
