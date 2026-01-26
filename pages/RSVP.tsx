@@ -100,8 +100,11 @@ const RSVP: React.FC = () => {
   return (
     <div className="animate-fade-in pb-20">
       <header className="text-center mb-10">
+        <div className="mb-6 text-primary">
+          <span className="material-symbols-outlined text-7xl">check_circle</span>
+        </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Confirmar Presença</h2>
-        <p className="text-stone-500">Por favor, confirme até o dia 10 de Outubro</p>
+        <p className="text-stone-500">Responder até Sábado 07/03, por pena 🙏</p>
       </header>
 
       <form onSubmit={handleSubmit} className="bg-white/40 backdrop-blur-sm p-8 rounded-3xl border border-stone-200 shadow-xl space-y-6">
