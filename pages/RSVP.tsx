@@ -91,7 +91,6 @@ const RSVP: React.FC = () => {
           "{aiGreeting}"
         </div>
         <div className="w-full flex flex-col gap-4 max-w-[320px]">
-          <BohoButton label="Ver Quem Mais Vai" icon="group" to="/confirmados" variant="primary" />
           <BohoButton label="Voltar ao Início" icon="arrow_back" variant="secondary" to="/" />
         </div>
       </div>
