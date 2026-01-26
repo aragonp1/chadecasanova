@@ -43,7 +43,7 @@ const RSVP: React.FC = () => {
       });
       setAiGreeting(response.text || 'Obrigada por confirmar! Mal posso esperar para te ver.');
     } catch (error) {
-      setAiGreeting('Obrigada por confirmar sua presença! Mal posso esperar para te ver.');
+      setAiGreeting('Essa é mais uma memória que construiremos juntos!');
     }
   };
 
