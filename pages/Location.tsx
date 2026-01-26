@@ -22,7 +22,8 @@ const Location: React.FC = () => {
             <span className="material-symbols-outlined text-primary mt-1">home</span>
             <div>
               <h4 className="font-bold text-[#2c1810]">Endereço</h4>
-              <p className="text-stone-600">{address} (Sujeito a alteração até 07/03)</p>
+              <p className="text-stone-600">{address}</p>
+              <p className="text-stone-600"><b>(Sujeito a alteração até 07/03)</b></p>
             
             </div>
           </div>
