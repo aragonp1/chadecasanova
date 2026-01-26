@@ -31,9 +31,9 @@ const Gifts: React.FC = () => {
         <ul className="text-stone-500 list-disc">
         <li>Sua presença é o item mais importante que espero receber</li>
         <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
-        <li>Seu mimo pode ser tanto na forma de um desses itens como o famoso PIX</li>
-        <li>Está liberado se juntar com os demais para um presente conjunto</li>
-        <li>A marcação é importante para evitar repetição de itens únicos</li>
+        <li>Seu mimo pode ser tanto um presente como o valor em PIX</li>
+        <li>Está liberado se juntar com alguém para presentear</li>
+        <li>A marcação é importante para evitar repetições</li>
         </ul>
       </header>
 
