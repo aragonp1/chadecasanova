@@ -1,18 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import BohoButton from '../components/BohoButton';
-import { RSVPConfirmation } from '../types';
 
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOlGVk7obyKiKckGMsN5mXBnYAag6QlZeAIh0I0cQW6zCZjH5JEyiwNl0Gwd0vUnyfhg/exec";
 
-interface GiftSelection {
-  itemName: string;
-  giverName: string;
-}
-
 const GuestList: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [confirmations, setConfirmations] = useState<RSVPConfirmation[]>([]);
+  const [confirmations, setConfirmations] = useState<any[]>([]);
   const [giftsByGiver, setGiftsByGiver] = useState<Record<string, string[]>>({});
 
   const fetchAllData = async () => {
@@ -21,28 +15,17 @@ const GuestList: React.FC = () => {
       if (!response.ok) throw new Error('Falha ao buscar dados');
       const data = await response.json();
       
-      let rsvps: RSVPConfirmation[] = [];
-      let gifts: GiftSelection[] = [];
+      let rsvps: any[] = data.rsvps || [];
+      let gifts: any[] = data.gifts || [];
 
-      // Ajusta conforme a estrutura retornada pelo Google Apps Script
-      if (data.rsvps) {
-        rsvps = data.rsvps;
-      } else if (Array.isArray(data)) {
-        rsvps = data.filter((item: any) => !item.type || item.type === 'rsvp');
-      }
-
-      if (data.gifts) {
-        gifts = data.gifts;
-      } else if (Array.isArray(data)) {
-        gifts = data.filter((item: any) => item.type === 'gift');
-      }
-
-      // Mapeia presentes por nome de quem deu (ignorando maiúsculas/minúsculas)
+      // Mapeia presentes por nome de quem deu (usando o novo campo Quem_Presenteou)
       const giftMap: Record<string, string[]> = {};
       gifts.forEach(g => {
-        const nameKey = g.giverName.toLowerCase().trim();
-        if (!giftMap[nameKey]) giftMap[nameKey] = [];
-        giftMap[nameKey].push(g.itemName);
+        if (g.Quem_Presenteou) {
+          const nameKey = g.Quem_Presenteou.toLowerCase().trim();
+          if (!giftMap[nameKey]) giftMap[nameKey] = [];
+          giftMap[nameKey].push(g.Presente_Nome);
+        }
       });
 
       setConfirmations(rsvps.reverse());
@@ -58,7 +41,7 @@ const GuestList: React.FC = () => {
     fetchAllData();
   }, []);
 
-  const totalGuests = confirmations.reduce((sum, conf) => sum + 1 + (Number(conf.companionsCount) || 0), 0);
+  const totalGuests = confirmations.reduce((sum, conf) => sum + 1 + (Number(conf.Qtd_Extras) || 0), 0);
 
   return (
     <div className="animate-fade-in pb-20">
@@ -87,24 +70,24 @@ const GuestList: React.FC = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {confirmations.map((conf) => {
-              const nameKey = conf.name.toLowerCase().trim();
+            {confirmations.map((conf, index) => {
+              const nameKey = (conf.Nome_Completo || "").toLowerCase().trim();
               const itemsChosen = giftsByGiver[nameKey] || [];
               
               return (
-                <div key={conf.id} className="bg-white/70 backdrop-blur-sm p-6 rounded-3xl border border-white shadow-sm flex flex-col gap-3 transition-all hover:shadow-md">
+                <div key={index} className="bg-white/70 backdrop-blur-sm p-6 rounded-3xl border border-white shadow-sm flex flex-col gap-3 transition-all hover:shadow-md">
                   <div className="flex justify-between items-start">
                     <div className="flex-grow">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-[#2c1810] text-xl leading-tight">{conf.name}</h4>
+                        <h4 className="font-bold text-[#2c1810] text-xl leading-tight">{conf.Nome_Completo}</h4>
                         {itemsChosen.length > 0 && (
                           <span className="material-symbols-outlined text-primary text-xl animate-pulse">redeem</span>
                         )}
                       </div>
                       
-                      {conf.companionsCount > 0 && (
+                      {Number(conf.Qtd_Extras) > 0 && conf.Nomes_Extras && (
                         <div className="mt-2 flex flex-wrap gap-2">
-                          {conf.companionNames.split(', ').map((cName, i) => (
+                          {conf.Nomes_Extras.split(', ').map((cName: string, i: number) => (
                             <span key={i} className="text-[10px] bg-stone-100 text-stone-500 px-2 py-0.5 rounded-lg font-bold border border-stone-200/50">
                               {cName}
                             </span>
@@ -114,10 +97,10 @@ const GuestList: React.FC = () => {
                     </div>
                     <div className="text-right flex flex-col items-end shrink-0">
                       <span className="text-[9px] text-stone-400 font-mono mb-1 uppercase tracking-tighter">
-                        {conf.timestamp?.split(' ')[0]}
+                        {conf.Horario_Registro?.split(' ')[0]}
                       </span>
                       <span className="text-[11px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-black">
-                        +{conf.companionsCount}
+                        +{conf.Qtd_Extras}
                       </span>
                     </div>
                   </div>
@@ -140,13 +123,13 @@ const GuestList: React.FC = () => {
                   <div className="flex items-center gap-2 pt-2 border-t border-stone-100/50">
                     <span className="material-symbols-outlined text-olive text-sm">nutrition</span>
                     <p className="text-[11px] text-stone-500">
-                      <span className="font-bold">Dieta:</span> {conf.dietary === 'Outros' ? conf.dietaryCustom : conf.dietary}
+                      <span className="font-bold">Dieta:</span> {conf.Tipo_Dieta === 'Outros' ? conf.Dieta_Especial : conf.Tipo_Dieta}
                     </p>
                   </div>
 
-                  {conf.message && (
+                  {conf.Recado_Amor && (
                     <p className="text-xs text-stone-400 italic leading-relaxed pl-3 border-l-2 border-primary/10 bg-stone-50/50 py-1 rounded-r-lg">
-                      "{conf.message}"
+                      "{conf.Recado_Amor}"
                     </p>
                   )}
                 </div>
