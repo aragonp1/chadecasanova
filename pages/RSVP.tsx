@@ -4,7 +4,7 @@ import { GoogleGenAI } from "@google/genai";
 import BohoButton from '../components/BohoButton';
 import { RSVPFormData } from '../types';
 
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOlGVk7obyKiKckGMsN5mXBnYAag6QlZeAIh0I0cQW6zCZjH5JEyiwNl0Gwd0vUnyfhg/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby9x2r3-Lr1sDvJXN82IdmoJfZrkTuudHXWtpNZHykWnNqsJ756E_Gzf2VzvQSxybM5iA/exec";
 
 const RSVP: React.FC = () => {
   const [formData, setFormData] = useState<RSVPFormData>({ 
