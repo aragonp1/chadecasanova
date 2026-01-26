@@ -13,7 +13,7 @@ const Location: React.FC = () => {
         <div className="mb-4 text-primary">
           <span className="material-symbols-outlined text-6xl">location_on</span>
         </div>
-        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Local do Evento</h2>
+        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Informações do Evento</h2>
         <p className="text-olive font-medium">Juro que não é em Itaitinga 😁</p>
       </header>
 
