@@ -102,7 +102,7 @@ const GuestList: React.FC = () => {
                         </div>
                         <h4 className="font-serif font-bold text-[#2c1810] text-xl">{conf.Nome_Completo}</h4>
                       </div>
-                      <span className="text-[10px] text-stone-300 font-mono tracking-wider">{conf.Horario_Registro?.split(' ')[0]}</span>
+                      {/* <span className="text-[10px] text-stone-300 font-mono tracking-wider">{conf.Horario_Registro?.split(' ')[0]}</span> */}
                     </div>
 
                     <div className="p-6 space-y-4">
@@ -195,9 +195,9 @@ const GuestList: React.FC = () => {
                   </div>
 
                   <div className="text-right shrink-0">
-                    <div className="text-[10px] font-mono text-stone-300">
+                    {/* <div className="text-[10px] font-mono text-stone-300">
                       {gift.Horario_Registro?.split(' ')[0]}
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}
@@ -214,3 +214,4 @@ const GuestList: React.FC = () => {
 };
 
 export default GuestList;
+
