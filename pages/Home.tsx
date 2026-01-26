@@ -44,7 +44,7 @@ const Home: React.FC = () => {
       <div className="w-full flex flex-col gap-5 items-stretch max-w-[320px] mx-auto">
         <BohoButton label="Minha Trajetória" icon="auto_stories" to="/trajetoria" />
         <BohoButton label="Informações do Evento" icon="location_on" to="/local" />
-        <BohoButton label="Confirmação de Presença" icon="check_circle" variant="primary" to="/rsvp" /> 
+        <BohoButton label="Confirmar Presença" icon="check_circle" variant="primary" to="/rsvp" /> 
         <BohoButton label="Lista de Presentes" icon="redeem" to="/presentes" />
       </div>
 
