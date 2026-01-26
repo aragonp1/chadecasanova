@@ -23,7 +23,7 @@ const Location: React.FC = () => {
             <div>
               <h4 className="font-bold text-[#2c1810]">Endereço</h4>
               <p className="text-stone-600">{address}</p>
-              <p className="text-stone-600"><b>(Sujeito a alteração até 07/03)</b></p>
+              <p className="text-stone-600"><b>Sujeito a alteração até 07/03</b></p>
             
             </div>
           </div>
