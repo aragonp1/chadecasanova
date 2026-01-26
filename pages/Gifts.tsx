@@ -149,10 +149,6 @@ const Gifts: React.FC = () => {
               {copied ? 'Chave Copiada!' : 'Copiar Chave PIX'}
             </button>
           </div>
-          
-          <p className="text-[10px] text-stone-400 text-center mt-4 italic">
-            Titular: Dayane Oliveira
-          </p>
         </div>
       </div>
 
