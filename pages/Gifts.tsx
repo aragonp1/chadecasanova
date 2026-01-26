@@ -211,7 +211,7 @@ const Gifts: React.FC = () => {
                     <span className={`font-bold ${isTaken ? 'line-through text-stone-400' : 'text-[#2c1810]'}`}>
                       {item.name}
                     </span>
-                    <span className="text-[10px] text-stone-400 font-medium">Sugestão Dayane</span>
+                  
                   </div>
                   {!isTaken ? (
                     <button 
