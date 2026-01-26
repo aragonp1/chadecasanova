@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import BohoButton from '../components/BohoButton';
 
-const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOlGVk7obyKiKckGMsN5mXBnYAag6QlZeAIh0I0cQW6zCZjH5JEyiwNl0Gwd0vUnyfhg/exec";
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby9x2r3-Lr1sDvJXN82IdmoJfZrkTuudHXWtpNZHykWnNqsJ756E_Gzf2VzvQSxybM5iA/exec";
 const PIX_KEY = "seu-email-ou-cpf-aqui@exemplo.com"; // Substitua pela sua chave real
 
 const ROOMS_DATA = {
