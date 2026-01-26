@@ -21,7 +21,7 @@ const STORY_SECTIONS: StorySection[] = [
   },
   {
     title: "Cada Detalhe Importa",
-    text: "Não foi uma busca rápida. Eu queria o melhor dos dois mundos: estar perto da rotina do meu trabalho atual, mas sem ficar longe do colo da minha família em Itaitinga. Eu procurava um lugar que não fosse apenas um endereço, mas que fizesse sentido para a vida que eu queria construir.",
+    text: "Em 2025 eu já ganhava bem mais do que quando me mudei mas ainda não o suficiente para morar em uma cobertura na Beira-Mar. Então vocês podem imaginar que não foi uma busca rápida, fiquei entre a distância do trabalho e a distância da minha família, o que cabia no meu bolso e o que eu não podia abrir mão, a preguiça de subir escada e o quão mais caro era um elevador, conciliar aluguel e parcela ou voltar para o Jabuti. Então, depois de pensar muito, chorar e sonhar, contei com uma corretora incrível para encontrar o lugar perfeito.",
     imageUrl: "https://i.ibb.co/MDCwCFfr/img-story2.jpg"
   },
   {
