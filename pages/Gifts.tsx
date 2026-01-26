@@ -27,7 +27,14 @@ const Gifts: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">redeem</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Mimos e Desejos</h2>
-        <p className="text-stone-500">Sua presença é o nosso maior presente, mas se quiser me mimar, aqui estão algumas formas:</p>
+        <p className="text-stone-500">Aqui vão algumas regras sobre os presentes:</p>
+        <ul className="text-stone-500">
+        <li>Sua presença é o item mais importante que espero receber</li>
+        <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
+        <li>Seu mimo pode ser tanto na forma de um desses itens como o famoso PIX</li>
+        <li>Está liberado se juntar com os demais para um presente conjunto</li>
+        <li>A marcação é importante para evitar repetição de itens únicos</li>
+        </ul>
       </header>
 
       {/* PIX Section */}
