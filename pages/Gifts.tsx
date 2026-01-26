@@ -7,37 +7,37 @@ const PIX_KEY = "seu-email-ou-cpf-aqui@exemplo.com"; // Substitua pela sua chave
 
 const ROOMS_DATA = {
   cozinha: [
-    { id: 'c1', name: 'Air Fryer', taken: false },
-    { id: 'c2', name: 'Batedeira de Bolo', taken: false },
-    { id: 'c3', name: 'Jogo de Panelas Antiaderentes', taken: false },
-    { id: 'c4', name: 'Micro-ondas Espelhado', taken: false },
-    { id: 'c5', name: 'Mesa de Jantar 4 Lugares', taken: false },
-    { id: 'c6', name: 'Jogo de Utensílios de Silicone', taken: false },
+    { id: 'c1', name: 'Air Fryer' },
+    { id: 'c2', name: 'Batedeira de Bolo' },
+    { id: 'c3', name: 'Jogo de Panelas Antiaderentes' },
+    { id: 'c4', name: 'Micro-ondas Espelhado' },
+    { id: 'c5', name: 'Mesa de Jantar 4 Lugares' },
+    { id: 'c6', name: 'Jogo de Utensílios de Silicone' },
   ],
   sala: [
-    { id: 's1', name: 'Tapete Boho Off-White', taken: false },
-    { id: 's2', name: 'Luminária de Chão', taken: false },
-    { id: 's3', name: 'Almofadas de Macramê', taken: false },
-    { id: 's4', name: 'Quadro Decorativo Minimalista', taken: false },
-    { id: 's5', name: 'Aparador de Livros', taken: false },
+    { id: 's1', name: 'Tapete Boho Off-White' },
+    { id: 's2', name: 'Luminária de Chão' },
+    { id: 's3', name: 'Almofadas de Macramê' },
+    { id: 's4', name: 'Quadro Decorativo Minimalista' },
+    { id: 's5', name: 'Aparador de Livros' },
   ],
   quarto: [
-    { id: 'q1', name: 'Jogo de Lençol Solteiro', taken: false },
-    { id: 'q2', name: 'Organizadores de Closet', taken: false },
-    { id: 'q3', name: 'Cortinas do Quarto', taken: false },
-    { id: 'q4', name: 'Cesto de Roupa Suja (Vime)', taken: false },
+    { id: 'q1', name: 'Jogo de Lençol Solteiro' },
+    { id: 'q2', name: 'Organizadores de Closet' },
+    { id: 'q3', name: 'Cortinas do Quarto' },
+    { id: 'q4', name: 'Cesto de Roupa Suja (Vime)' },
   ],
   suite: [
-    { id: 'st1', name: 'Jogo de Cama King (Linho)', taken: false },
-    { id: 'st2', name: 'Abajur de Cabeceira', taken: false },
-    { id: 'st3', name: 'Manta de Tricot', taken: false },
-    { id: 'st4', name: 'Espelho de Chão Médio', taken: false },
+    { id: 'st1', name: 'Jogo de Cama King (Linho)' },
+    { id: 'st2', name: 'Abajur de Cabeceira' },
+    { id: 'st3', name: 'Manta de Tricot' },
+    { id: 'st4', name: 'Espelho de Chão Médio' },
   ],
   bwc: [
-    { id: 'b1', name: 'Kit Lavabo de Cerâmica', taken: false },
-    { id: 'b2', name: 'Jogo de Toalhas de Banho (6 peças)', taken: false },
-    { id: 'b3', name: 'Prateleira de Bambu para Banheiro', taken: false },
-    { id: 'b4', name: 'Tapete Antiderrapante Luxo', taken: false },
+    { id: 'b1', name: 'Kit Lavabo de Cerâmica' },
+    { id: 'b2', name: 'Jogo de Toalhas de Banho (6 peças)' },
+    { id: 'b3', name: 'Prateleira de Bambu para Banheiro' },
+    { id: 'b4', name: 'Tapete Antiderrapante Luxo' },
   ]
 };
 
@@ -53,10 +53,8 @@ const Gifts: React.FC = () => {
         const response = await fetch(GOOGLE_SHEET_URL);
         const data = await response.json();
         if (data.gifts) {
-          setReservedGifts(data.gifts.map((g: any) => g.itemName));
-        } else if (Array.isArray(data)) {
-          const gifts = data.filter(item => item.type === 'gift').map(item => item.itemName);
-          setReservedGifts(gifts);
+          // Usando o novo nome do campo Presente_Nome
+          setReservedGifts(data.gifts.map((g: any) => g.Presente_Nome));
         }
       } catch (e) {
         console.error("Erro ao carregar presentes:", e);
@@ -85,12 +83,11 @@ const Gifts: React.FC = () => {
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'gift',
-          id: crypto.randomUUID(),
-          itemName: giftName,
-          room: roomName,
-          giverName: name.trim(),
-          timestamp: new Date().toLocaleString('pt-BR')
+          Categoria_Info: 'presente',
+          Horario_Registro: new Date().toLocaleString('pt-BR'),
+          Presente_Nome: giftName,
+          Presente_Comodo: roomName,
+          Quem_Presenteou: name.trim()
         })
       });
 
@@ -163,7 +160,7 @@ const Gifts: React.FC = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
           style={{ 
-            backgroundImage: "url('https://i.ibb.co/TDfPLs27/img-story3-1.jpg')",
+            backgroundImage: "url('./planta.jpg')",
             backgroundColor: "#f3f3f3"
           }}
         ></div>
