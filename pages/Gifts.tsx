@@ -11,7 +11,7 @@ const GIFT_IDEAS: Partial<GiftItem>[] = [
 
 const Gifts: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  const pixKey = "4074dd6d-9faa-4e8d-b944-bfb6a47277ba"; 
+  const pixKey = "068.262.493-40"; 
   const amazonWishlistUrl = "https://www.amazon.com.br/hz/wishlist/ls";
 
   const handleCopyPix = () => {
@@ -26,7 +26,7 @@ const Gifts: React.FC = () => {
         <div className="mb-4 text-primary">
           <span className="material-symbols-outlined text-6xl">redeem</span>
         </div>
-        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Lista de Presentes</h2>
+        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Mimos e Desejos</h2>
         <p className="text-stone-500">Sua presença é o nosso maior presente, mas se quiser me mimar, aqui estão algumas formas:</p>
       </header>
 
