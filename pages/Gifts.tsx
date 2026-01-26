@@ -27,8 +27,8 @@ const Gifts: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">redeem</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Mimos e Desejos</h2>
-        <p className="text-stone-500">Aqui vão algumas regras sobre os presentes:</p>
-        <ul className="text-stone-500 list-disc">
+        <p className="text-stone-500">Aqui vão algumas regras sobre os presentes📋:</p>
+        <ul className="text-stone-500 list-disc text-left">
         <li>Sua presença é o item mais importante que espero receber</li>
         <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
         <li>Seu mimo pode ser tanto um presente como o valor em PIX</li>
