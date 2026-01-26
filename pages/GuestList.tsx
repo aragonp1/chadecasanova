@@ -100,9 +100,10 @@ const GuestList: React.FC = () => {
         )}
       </section>
 
-      <BohoButton label="Voltar ao Início" icon="arrow_back" variant="secondary" to="/" />
+      <BohoButton label="Acessar Convite" variant="secondary" to="/" />
     </div>
   );
 };
 
 export default GuestList;
+
