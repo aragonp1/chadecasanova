@@ -39,7 +39,7 @@ const Trajectory: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">auto_stories</span>
         </div>
         <h2 className="text-4xl font-serif font-bold text-[#2c1810] mb-2 tracking-tight">Minha Trajetória</h2>
-        <p className="text-olive font-medium italic">Um sonho que se tornou realidade</p>
+        <p className="text-olive font-medium italic">Um sonho que se tornou realidade ☁️</p>
       </header>
 
       <div className="relative max-w-md mx-auto">
