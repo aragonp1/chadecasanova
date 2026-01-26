@@ -48,8 +48,8 @@ const GuestList: React.FC = () => {
         <div className="flex flex-col items-center gap-1">
           <p className="text-stone-500 text-sm italic">
             {activeTab === 'convidados' 
-              ? `Estamos muito felizes com ${totalGuests} presenças!` 
-              : `Gratidão! ${gifts.length} presentes já foram reservados.`}
+              ? `No momento há ${totalGuests} confirmados!` 
+              : `${gifts.length} presentes já foram reservados.`}
           </p>
           <div className="h-1 w-12 bg-primary/20 rounded-full mt-2"></div>
         </div>
@@ -214,4 +214,5 @@ const GuestList: React.FC = () => {
 };
 
 export default GuestList;
+
 
