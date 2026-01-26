@@ -4,7 +4,7 @@ import BohoButton from '../components/BohoButton';
 
 const Location: React.FC = () => {
   const address = "Rua Pedro Lopes, 482 - Guajeru";
-  const adress2 = "Fortaleza - CE, 60843-290"
+  const address2 = "Fortaleza - CE, 60843-290"
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 
   return (
