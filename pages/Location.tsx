@@ -34,7 +34,7 @@ const Location: React.FC = () => {
             <span className="material-symbols-outlined text-primary mt-1">calendar_month</span>
             <div>
               <h4 className="font-bold text-[#2c1810]">Data</h4>
-              <p className="text-stone-600">Sábado, 14 de Março às 16:00h</p>
+              <p className="text-stone-600">Sábado, 14 de Março às 15:00h</p>
             </div>
           </div>
 
