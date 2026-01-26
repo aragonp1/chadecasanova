@@ -26,12 +26,7 @@ const STORY_SECTIONS: StorySection[] = [
   },
   {
     title: "Finalmente, Lar",
-    text: "Quem me conhece sabe que eu presto atenção em tudo! Tinha que ter academia por perto para manter o ritmo e um mercadinho para facilitar o dia a dia. Mas confesso: o que me ganhou de verdade foi descobrir que tinha um restaurante com o meu espetinho favorito logo ali do lado. 😂 Afinal, a felicidade mora nos detalhes (e no espetinho bem feito!).",
-    imageUrl: "https://i.ibb.co/sJ93Mhy7/img-story3.jpg"
-  },
-  {
-    title: "Finalmente, Lar",
-    text: "Hoje, eu não abro mais uma porta que é emprestada. Eu abro a porta da minha conquista. Olhar para esse apartamento e saber que cada pedacinho dele representa o meu esforço é a sensação mais gratificante do mundo.",
+    text: "A MINHA casa está quase pronta mas eu já me apaixonei por cada cantinho dela, cada atualização que saía, saber que tem uma academia bem em frente para acabar com as minhas desculpas, vários mercadinhos com Coca geladinha, um espetinho de dar água na boca e que vai me poupar muito tempo e dinheiro. Voltar para a minha família nessa espera foi essencial, mas não vejo a hora de ter o meu cantinho de novo. Fico tranquila de estar apenas uma BR de distância do colo da Ena e bem mais próxima de dar voos ainda maiores.",
     imageUrl: "https://i.ibb.co/PGSgr7gf/img-story4.jpg"
   }
 ];
@@ -83,7 +78,7 @@ const Trajectory: React.FC = () => {
 
       <div className="mt-16 text-center px-4">
         <p className="font-serif text-2xl text-[#2c1810] italic mb-8">
-          "E o próximo capítulo escrevemos juntos, no meu novo lar!"
+          "E, o próximo capítulo, escreveremos juntos no meu novo lar!"
         </p>
         <BohoButton label="Voltar ao Início" icon="arrow_back" variant="secondary" to="/" className="max-w-[320px] mx-auto" />
       </div>
