@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import BohoButton from '../components/BohoButton';
 
 const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbxOlGVk7obyKiKckGMsN5mXBnYAag6QlZeAIh0I0cQW6zCZjH5JEyiwNl0Gwd0vUnyfhg/exec";
-const PIX_KEY = "seu-email-ou-cpf-aqui@exemplo.com"; // Substitua pela sua chave real
+const PIX_KEY = "4074dd6d-9faa-4e8d-b944-bfb6a47277ba"; // Substitua pela sua chave real
 
 const ROOMS_DATA = {
   cozinha: [
@@ -108,7 +108,14 @@ const Gifts: React.FC = () => {
           <span className="material-symbols-outlined text-6xl">home_pin</span>
         </div>
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Lista de Presentes</h2>
-        <p className="text-stone-500 text-sm italic px-6">Escolha como deseja nos presentear</p>
+        <p className="text-stone-500 px-6">Aqui vão algumas regras sobre os peresentes 📋:</p>
+        <ul className="text-stone-500 px-6 text-left list-disc">
+        <li>Sua presença é o item mais importante que espero receber</li>
+        <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
+        <li>Seu mimo pode ser tanto um presente como o valor PIX</li>
+        <li>Está liberado se juntar com alguém para presentear</li>
+        <li>A marcação é importante para evitar repetições</li>
+        </ul>
       </header>
 
       {/* Seção PIX - DESTAQUE */}
@@ -120,10 +127,10 @@ const Gifts: React.FC = () => {
         <div className="relative z-10">
           <h3 className="text-xl font-serif font-bold text-[#2c1810] mb-2 flex items-center gap-2">
             <span className="material-symbols-outlined text-primary">volunteer_activism</span>
-            Presente em Dinheiro (PIX)
+            Presente via PIX
           </h3>
           <p className="text-stone-600 text-sm mb-6 leading-relaxed">
-            Se preferir nos ajudar com qualquer valor para a montagem do nosso lar, nossa chave PIX está abaixo:
+            Se preferir me presentear com qualquer valor, você pode usar a chave PIX abaixo:
           </p>
           
           <div className="bg-[#f2efe9] p-4 rounded-2xl border border-stone-200 flex flex-col items-center gap-4">
