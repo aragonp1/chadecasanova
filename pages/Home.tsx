@@ -1,10 +1,8 @@
 import React from 'react';
 import BohoButton from '../components/BohoButton';
-// CORREÇÃO 1: Adicionada a barra "/" após os pontos
 import FotoHome from '../img/foto-convite.png'; 
 
 const Home: React.FC = () => {
-  // CORREÇÃO 2: Usei "FotoHome" (Maiúsculo) para bater com o import lá de cima
   const estiloHome = {
     backgroundImage: `url(${FotoHome})`, 
     backgroundSize: 'cover',
