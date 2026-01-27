@@ -109,7 +109,7 @@ const RSVP: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="bg-white/40 backdrop-blur-sm p-8 rounded-3xl border border-stone-200 shadow-xl space-y-6">
         <div>
-          <label className="block text-sm font-bold text-[#2c1810] mb-2">Seu Nome Completo</label>
+          <label className="block text-sm font-bold text-[#2c1810] mb-2">Seu Nome e Sobrenome</label>
           <input 
             type="text" 
             required
