@@ -7,19 +7,39 @@ const PIX_KEY = "4074dd6d-9faa-4e8d-b944-bfb6a47277ba"; // Substitua pela sua ch
 
 const ROOMS_DATA = {
   cozinha: [
-    { id: 'c1', name: 'Air Fryer' },
-    { id: 'c2', name: 'Batedeira de Bolo' },
-    { id: 'c3', name: 'Jogo de Panelas Antiaderentes' },
-    { id: 'c4', name: 'Micro-ondas Espelhado' },
-    { id: 'c5', name: 'Mesa de Jantar 4 Lugares' },
-    { id: 'c6', name: 'Jogo de Utensílios de Silicone' },
+    { id: 'c1', name: 'Cafeteira' },
+    { id: 'c2', name: 'Conjunto de pratos' },
+    { id: 'c3', name: 'Cooktop' },
+    { id: 'c4', name: 'Escorredor de louça' },
+    { id: 'c5', name: 'Faqueiro' },
+    { id: 'c6', name: 'Frigideira antiaderente' },
+    { id: 'c6', name: 'Fritadeira Air Fryer forno' },
+    { id: 'c6', name: 'Jogo americano' },
+    { id: 'c6', name: 'Jogo de assadeiras' },
+    { id: 'c6', name: 'Jogo de panela antiaderente' },
+    { id: 'c6', name: 'Jogo de utensílios de silicone' },
+    { id: 'c6', name: 'Kit de ferramentas' },
+    { id: 'c6', name: 'Liquidificador' },
+    { id: 'c6', name: 'Máquina de lavar' },
+    { id: 'c6', name: 'Mesa de jantar 4 lugares' },
+    { id: 'c6', name: 'Mop' },
+    { id: 'c6', name: 'Panela de pressão' },
+    { id: 'c6', name: 'Pano de prato' },
+    { id: 'c6', name: 'Petisqueira' },
+    { id: 'c6', name: 'Toalha de mesa' },
   ],
   sala: [
-    { id: 's1', name: 'Tapete Boho Off-White' },
-    { id: 's2', name: 'Luminária de Chão' },
-    { id: 's3', name: 'Almofadas de Macramê' },
-    { id: 's4', name: 'Quadro Decorativo Minimalista' },
-    { id: 's5', name: 'Aparador de Livros' },
+    { id: 's1', name: 'Alexa' },
+    { id: 's2', name: 'Almofadas' },
+    { id: 's3', name: 'Cortina blackout' },
+    { id: 's4', name: 'Jarros de planta' },
+    { id: 's5', name: 'Lâmpada inteligente' },
+    { id: 's5', name: 'Mesa de centro' },
+    { id: 's5', name: 'Painel para TV' },
+    { id: 's5', name: 'Robô aspirador' },
+    { id: 's5', name: 'Sofá cama' },
+    { id: 's5', name: 'Tapete' },
+    { id: 's5', name: 'Televisão' },
   ],
   quarto: [
     { id: 'q1', name: 'Jogo de Lençol Solteiro' },
@@ -28,16 +48,26 @@ const ROOMS_DATA = {
     { id: 'q4', name: 'Cesto de Roupa Suja (Vime)' },
   ],
   suite: [
-    { id: 'st1', name: 'Jogo de Cama King (Linho)' },
-    { id: 'st2', name: 'Abajur de Cabeceira' },
-    { id: 'st3', name: 'Manta de Tricot' },
-    { id: 'st4', name: 'Espelho de Chão Médio' },
+    { id: 'st1', name: 'Ar condicionado' },
+    { id: 'st2', name: 'Caixas organizadoras' },
+    { id: 'st3', name: 'Cortina blackout' },
+    { id: 'st4', name: 'Espelho de corpo inteiro' },
+    { id: 'st4', name: 'Jogo de cama Queen 1' },
+    { id: 'st4', name: 'Jogo de cama Queen 2' },
+    { id: 'st4', name: 'Lençol elástico' },
+    { id: 'st4', name: 'Porta jóias' },
+    { id: 'st4', name: 'Tapete felpudo' },
+    { id: 'st4', name: 'Televisão' },
+    { id: 'st4', name: 'Travesseiros' },
   ],
   bwc: [
-    { id: 'b1', name: 'Kit Lavabo de Cerâmica' },
-    { id: 'b2', name: 'Jogo de Toalhas de Banho (6 peças)' },
-    { id: 'b3', name: 'Prateleira de Bambu para Banheiro' },
-    { id: 'b4', name: 'Tapete Antiderrapante Luxo' },
+    { id: 'b1', name: 'Armário com espelho' },
+    { id: 'b2', name: 'Cesto para roupa' },
+    { id: 'b3', name: 'Chuveiro elétrico' },
+    { id: 'b4', name: 'Jogo de toalhas' },
+    { id: 'b4', name: 'Kit lavabo de cerâmicas' },
+    { id: 'b4', name: 'Prateleira de bambu' },
+    { id: 'b4', name: 'Tapete antiderrapante' },
   ]
 };
 
@@ -70,9 +100,9 @@ const Gifts: React.FC = () => {
   };
 
   const handleReserve = async (giftName: string, roomName: string) => {
-    const name = prompt(`Você escolheu: ${giftName}\n\nPor favor, digite seu nome completo para confirmarmos:`);
+    const name = prompt(`Você escolheu: ${giftName}\n\nPor favor, digite seu nome/grupo para confirmarmos:`);
     if (!name || name.trim() === "") {
-      alert("Precisamos do seu nome para reservar o presente.");
+      alert("Precisamos do seu nome/grupo para reservar o presente.");
       return;
     }
 
@@ -115,7 +145,10 @@ const Gifts: React.FC = () => {
         <li>Seu mimo pode ser tanto um presente como o valor PIX</li>
         <li>Está liberado se juntar com alguém para presentear</li>
         <li>A marcação é importante para evitar repetições</li>
+        <li>Também aceito mimos fora da lista: Decorações ou algo bem nerd</li>
+        <li>Cor primária: Branca | Secundária: Cores Pastéis (Rosa bebê ou Azul bebê)</li>
         </ul>
+        <p className="text-stone-500 px-6">Obs: Caso mude de ideia de um item, entre em contato para que seja liberado novamente na lista</p>
       </header>
 
       {/* Seção PIX - DESTAQUE */}
@@ -129,9 +162,9 @@ const Gifts: React.FC = () => {
             <span className="material-symbols-outlined text-primary">volunteer_activism</span>
             Presente via PIX
           </h3>
-          <p className="text-stone-600 text-sm mb-6 leading-relaxed">
+          {/* <p className="text-stone-600 text-sm mb-6 leading-relaxed">
             Se preferir me presentear com qualquer valor, você pode usar a chave PIX abaixo:
-          </p>
+          </p> */}
           
           <div className="bg-[#f2efe9] p-4 rounded-2xl border border-stone-200 flex flex-col items-center gap-4">
             <div className="text-center">
