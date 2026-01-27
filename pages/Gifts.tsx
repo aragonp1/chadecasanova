@@ -42,10 +42,13 @@ const ROOMS_DATA = {
     { id: 's11', name: 'Televisão' },
   ],
   quarto: [
-    { id: 'q1', name: 'Jogo de Lençol Solteiro' },
-    { id: 'q2', name: 'Organizadores de Closet' },
-    { id: 'q3', name: 'Cortinas do Quarto' },
-    { id: 'q4', name: 'Cesto de Roupa Suja (Vime)' },
+    { id: 'q1', name: 'Caixas organizadoras' },
+    { id: 'q2', name: 'Cortina blackout' },
+    { id: 'q3', name: 'Estante' },
+    { id: 'q4', name: 'Puff' },
+    { id: 'q5', name: 'Rede' },
+    { id: 'q6', name: 'Tapete' },
+    { id: 'q7', name: 'Ventilador' },
   ],
   suite: [
     { id: 'st1', name: 'Ar condicionado' },
@@ -145,10 +148,11 @@ const Gifts: React.FC = () => {
         <li>Seu mimo pode ser tanto um presente como o valor PIX</li>
         <li>Está liberado se juntar com alguém para presentear</li>
         <li>A marcação é importante para evitar repetições</li>
-        <li>Ítens fora da lista, principalmente de decoração, são bem-vindos</li>
-        <li>Cor Primária: Branca | Secundária: Cores Claras(Ex: Rosa bebê)</li>
-        </ul>
+        <li>Itens fora da lista, principalmente de decoração, são bem-vindos</li>
+        <li>Cor prioritária: branco | Adaptar de acordo com o item, com prioridade para cores claras (ex: rosa bebê)</li>
         <li>Caso mude de ideia de um item, entre em contato para que atualize a lista</li>
+        </ul>
+       
       </header>
 
       {/* Seção PIX - DESTAQUE */}
