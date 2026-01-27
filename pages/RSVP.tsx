@@ -160,10 +160,10 @@ const RSVP: React.FC = () => {
             onChange={e => setFormData({...formData, dietary: e.target.value})}
           >
             <option value="Nenhuma">Nenhuma</option>
-            <option value="Vegano">Vegano</option>
-            <option value="Vegetariano">Vegetariano</option>
-            <option value="Intolerante a lactose">Intolerante a lactose</option>
             <option value="Celíaco">Celíaco</option>
+            <option value="Intolerante a lactose">Intolerante a lactose</option>
+            <option value="Vegano">Vegano</option>
+            <option value="Vegetariano">Vegetariano</option>            
             <option value="Outros">Outros</option>
           </select>
         </div>
