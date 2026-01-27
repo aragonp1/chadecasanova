@@ -156,9 +156,9 @@ const Gifts: React.FC = () => {
     <div className="animate-fade-in pb-20">
       <header className="text-center mb-8">
         <div className="mb-4 text-primary">
-          <span className="material-symbols-outlined text-6xl">home_pin</span>
+          <span className="material-symbols-outlined text-6xl">redeem</span>
         </div>
-        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Lista de Presentes</h2>
+        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Mimos e Desejos</h2>
         <div className="bg-[#fcfaf7] p-6 rounded-3xl border border-stone-100 shadow-inner text-left mb-6">
           <p className="text-[#2c1810] font-bold text-sm mb-3 flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-lg">assignment</span>
