@@ -150,7 +150,7 @@ const Gifts: React.FC = () => {
         <li>A marcação é importante para evitar repetições</li>
         <li>Itens fora da lista, principalmente de decoração, são bem-vindos</li>
         <li>Cor prioritária: branco | Adaptar de acordo com o item, com prioridade para cores claras (ex: rosa bebê)</li>
-        <li>Caso mude de ideia de um item, entre em contato para que atualize a lista</li>
+        <li>Caso mude de ideia, entre em contato para que eu atualize a lista</li>
         </ul>
        
       </header>
