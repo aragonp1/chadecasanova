@@ -41,7 +41,7 @@ const ROOMS_DATA = {
     { id: 's10', name: 'Tapete' },
     { id: 's11', name: 'Televisão' },
   ],
-  quarto: [
+  quarto/escritorio: [
     { id: 'q1', name: 'Caixas organizadoras' },
     { id: 'q2', name: 'Cortina blackout' },
     { id: 'q3', name: 'Estante' },
@@ -208,7 +208,7 @@ const Gifts: React.FC = () => {
         <div className={`absolute inset-0 bg-black/5 transition-opacity duration-300 pointer-events-none ${selectedRoom ? 'opacity-100' : 'opacity-0'}`}></div>
 
         <svg viewBox="0 0 800 500" className="absolute inset-0 w-full h-full z-10">
-          <rect x="0" y="0" width="315" height="325" className={`cursor-pointer transition-all duration-300 ${selectedRoom === 'quarto' ? 'fill-primary/30 stroke-primary stroke-[4px]' : 'fill-transparent hover:fill-primary/10'}`} onClick={() => setSelectedRoom('quarto')} />
+          <rect x="0" y="0" width="315" height="325" className={`cursor-pointer transition-all duration-300 ${selectedRoom === 'quarto/escritorio' ? 'fill-primary/30 stroke-primary stroke-[4px]' : 'fill-transparent hover:fill-primary/10'}`} onClick={() => setSelectedRoom('quarto/escritorio')} />
           <rect x="320" y="0" width="230" height="500" className={`cursor-pointer transition-all duration-300 ${selectedRoom === 'sala' ? 'fill-primary/30 stroke-primary stroke-[4px]' : 'fill-transparent hover:fill-primary/10'}`} onClick={() => setSelectedRoom('sala')} />
           <rect x="555" y="0" width="245" height="325" className={`cursor-pointer transition-all duration-300 ${selectedRoom === 'suite' ? 'fill-primary/30 stroke-primary stroke-[4px]' : 'fill-transparent hover:fill-primary/10'}`} onClick={() => setSelectedRoom('suite')} />
           <rect x="0" y="330" width="315" height="170" className={`cursor-pointer transition-all duration-300 ${selectedRoom === 'cozinha' ? 'fill-primary/30 stroke-primary stroke-[4px]' : 'fill-transparent hover:fill-primary/10'}`} onClick={() => setSelectedRoom('cozinha')} />
@@ -230,7 +230,7 @@ const Gifts: React.FC = () => {
           <div className="flex justify-between items-center border-b border-stone-100 pb-3">
             <h3 className="font-serif text-2xl font-bold text-[#2c1810] capitalize flex items-center gap-2">
                <span className="material-symbols-outlined text-primary">
-                 {selectedRoom === 'cozinha' ? 'kitchen' : selectedRoom === 'sala' ? 'weekend' : selectedRoom === 'Quarto/Escritório' ? 'bed' : selectedRoom === 'suite' ? 'king_bed' : 'clean_hands'}
+                 {selectedRoom === 'cozinha' ? 'kitchen' : selectedRoom === 'sala' ? 'weekend' : selectedRoom === 'quarto/escritorio' ? 'bed' : selectedRoom === 'suite' ? 'king_bed' : 'clean_hands'}
                </span>
                {selectedRoom === 'bwc' ? 'Banheiro' : selectedRoom === 'cozinha' ? 'Cozinha/Serviço' : selectedRoom === 'suite' ? 'Suíte' : selectedRoom}
             </h3>
