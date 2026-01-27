@@ -53,7 +53,7 @@ const ROOMS_DATA = {
   ],
   suite: [
     { id: 'st1', name: 'Ar condicionado' },
-    { id: 'st2', name: 'Caixas organizadoras Quarto' },
+    { id: 'st2', name: 'Caixas organizadoras Suite' },
     { id: 'st3', name: 'Cortina blackout Suite' },
     { id: 'st4', name: 'Espelho de corpo inteiro' },
     { id: 'st5', name: 'Jogo de cama Queen 1' },
