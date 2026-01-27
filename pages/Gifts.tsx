@@ -144,14 +144,14 @@ const Gifts: React.FC = () => {
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Lista de Presentes</h2>
         <p className="text-stone-500 px-6">Aqui vão algumas regras sobre os presentes 📋:</p>
         <ul className="text-stone-500 px-6 text-left list-disc">
-        <li>Sua presença é o item mais importante que espero receber</li>
-        <li>Em cada cômodo da casa vai ter meus desejos para o local</li>
-        <li>Seu mimo pode ser tanto um presente como o valor PIX</li>
-        <li>Está liberado se juntar com alguém para presentear</li>
-        <li>A marcação é importante para evitar repetições</li>
-        <li>Itens fora da lista, principalmente de decoração, são bem-vindos</li>
-        <li>Cor prioritária: branco | Adaptar de acordo com o item, com prioridade para cores claras (ex: rosa bebê)</li>
-        <li>Caso mude de ideia, entre em contato para que eu atualize a lista</li>
+        <li>Sua presença é o item mais importante que espero receber;</li>
+        <li>Em cada cômodo da casa vai ter meus desejos para o local;</li>
+        <li>Seu mimo pode ser tanto um presente como o valor PIX;</li>
+        <li>Está liberado se juntar com alguém para presentear;</li>
+        <li>A marcação é importante para evitar repetições;</li>
+        <li>Itens fora da lista, principalmente de decoração, são bem-vindos;</li>
+        <li>Cor prioritária: branco | Adaptar de acordo com o item, com prioridade para cores claras (ex: rosa bebê);</li>
+        <li>Caso mude de ideia, entre em contato para que eu atualize a lista.</li>
         </ul>
        
       </header>
