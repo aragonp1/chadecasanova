@@ -132,7 +132,7 @@ const GuestList: React.FC = () => {
                       <div className="pt-2 border-t border-stone-50">
                         <span className="text-[10px] font-black uppercase text-stone-400 tracking-widest flex items-center gap-1 mb-2">
                           <span className="material-symbols-outlined text-xs">restaurant</span>
-                          Informação Alimentar
+                          Restrição Alimentar
                         </span>
                         <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border ${conf.Tipo_Dieta === 'Nenhuma' ? 'bg-stone-50 border-stone-100 text-stone-400' : 'bg-olive/10 border-olive/20 text-olive'}`}>
                            <span className="material-symbols-outlined text-sm">
@@ -149,7 +149,7 @@ const GuestList: React.FC = () => {
                         <div className="pt-2 border-t border-stone-50">
                            <span className="text-[10px] font-black uppercase text-stone-400 tracking-widest flex items-center gap-1 mb-2">
                              <span className="material-symbols-outlined text-xs">chat_bubble</span>
-                             Mensagem Carinhosa
+                             Mensagem
                            </span>
                            <div className="relative">
                              <span className="absolute -left-2 -top-1 text-primary/20 text-4xl font-serif">“</span>
@@ -214,5 +214,6 @@ const GuestList: React.FC = () => {
 };
 
 export default GuestList;
+
 
 
