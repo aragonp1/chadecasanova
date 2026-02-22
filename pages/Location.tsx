@@ -25,7 +25,6 @@ const Location: React.FC = () => {
               <h4 className="font-bold text-[#2c1810]">Endereço</h4>
               <p className="text-stone-600">{address}</p>
               <p className="text-stone-600">{address2}</p>
-              <p className="text-stone-600"><b>Sujeito a alteração até 07/03</b></p>
             
             </div>
           </div>
@@ -44,7 +43,7 @@ const Location: React.FC = () => {
 
         <div className="mt-8 h-48 rounded-xl bg-stone-100 overflow-hidden relative group">
            <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3980.9143537589093!2d-38.47887578941148!3d-3.8285438961292004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7c74500276daf31%3A0x45fefdc58216eb3f!2sResidencial%20ap%C3%AA%20Messejana!5e0!3m2!1spt-BR!2sbr!4v1767988092041!5m2!1spt-BR!2sbr" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3981.2277448372893!2d-38.5630126!3d-3.7605394999999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7c749515a4f901b%3A0x69d16970196cb052!2sR.%20Ceará%2C%20604%20-%20Pan-Americano%2C%20Fortaleza%20-%20CE%2C%2060441-570!5e0!3m2!1spt-BR!2sbr!4v1771720960924!5m2!1spt-BR!2sbr" 
             width="100%" 
             height="100%" 
             style={{ border: 0 }} 
