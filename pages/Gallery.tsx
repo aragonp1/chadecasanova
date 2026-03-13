@@ -235,24 +235,57 @@ const Gallery: React.FC = () => {
       return;
     }
 
-    const newFiles: File[] = [];
-    const newPreviews: string[] = [];
+    const compressImage = (file: File): Promise<string> => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (event) => {
+          const img = new Image();
+          img.src = event.target?.result as string;
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 800;
+            const MAX_HEIGHT = 800;
+            let width = img.width;
+            let height = img.height;
 
-    files.forEach(file => {
-      if (file.size > 500000) { // Reduzi para 500KB para caber mais fotos no limite do Firestore
-        alert(`A imagem ${file.name} é muito grande. Por favor, escolha imagens menores que 500KB.`);
-        return;
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(img, 0, 0, width, height);
+            
+            // Compress to JPEG with 0.7 quality
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+            resolve(dataUrl);
+          };
+          img.onerror = reject;
+        };
+        reader.onerror = reject;
+      });
+    };
+
+    files.forEach(async (file) => {
+      try {
+        const compressedDataUrl = await compressImage(file);
+        setPreviewUrls(prev => [...prev, compressedDataUrl]);
+        setSelectedFiles(prev => [...prev, file]);
+      } catch (error) {
+        console.error("Erro ao processar imagem:", error);
+        alert(`Erro ao processar a imagem ${file.name}`);
       }
-      newFiles.push(file);
-      
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrls(prev => [...prev, reader.result as string]);
-      };
-      reader.readAsDataURL(file);
     });
-
-    setSelectedFiles(prev => [...prev, ...newFiles]);
   };
 
   const removePreview = (index: number) => {
@@ -306,7 +339,7 @@ const Gallery: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto pb-20">
+    <div className="w-full max-w-2xl mx-auto pb-32">
       <div className="mb-6">
         <Link 
           to="/" 
