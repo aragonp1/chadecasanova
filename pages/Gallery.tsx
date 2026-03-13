@@ -294,7 +294,7 @@ const Gallery: React.FC = () => {
             {/* Botão de seleção removido daqui para ser colocado na barra de ações abaixo */}
           </div>
         </div>
-
+        <div className="animate-fade-in flex flex-col items-center text-center">
         <header className="mb-8">
         <div className="mb-4 text-primary">
           <span className="material-symbols-outlined text-6xl">photo_library</span>
@@ -302,6 +302,7 @@ const Gallery: React.FC = () => {
         <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Galeria de Fotos</h2>
         <p className="text-olive font-medium">Compartilhe e reviva os melhores momentos 🤳</p>
       </header>
+          </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-1">
