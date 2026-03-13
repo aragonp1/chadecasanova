@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   collection, 
@@ -51,42 +50,23 @@ function cn(...inputs: ClassValue[]) {
 
 const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: string) => void; onDownload: (url: string, id: string) => void }> = ({ photo, user, onDelete, onDownload }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
   const urls = photo.urls || (photo.url ? [photo.url] : []);
 
   const next = () => {
-    setDirection(1);
     setCurrentIndex((prev) => (prev + 1) % urls.length);
   };
 
   const prev = () => {
-    setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + urls.length) % urls.length);
   };
 
   const handleDragEnd = (e: any, { offset, velocity }: any) => {
-    if (urls.length <= 1) return;
     const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500;
     if (swipe && offset.x > 0) {
       prev();
     } else if (swipe && offset.x < 0) {
       next();
     }
-  };
-
-  const variants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? '100%' : '-100%',
-      opacity: 1
-    }),
-    center: {
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction: number) => ({
-      x: direction < 0 ? '100%' : '-100%',
-      opacity: 1
-    })
   };
 
   return (
@@ -141,28 +121,20 @@ const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: stri
 
       {/* Image / Carousel */}
       <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden touch-pan-y">
-        <AnimatePresence initial={false} custom={direction}>
+        <AnimatePresence mode="wait">
           <motion.img 
             key={currentIndex}
             src={urls[currentIndex]} 
             alt={photo.caption} 
-            custom={direction}
-            variants={variants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
-              opacity: { duration: 0.2 }
-            }}
-            drag={urls.length > 1 ? "x" : false}
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
-            className={cn(
-              "absolute inset-0 w-full h-full object-cover",
-              urls.length > 1 ? "cursor-grab active:cursor-grabbing" : ""
-            )}
+            className="w-full h-full object-cover cursor-grab active:cursor-grabbing"
             referrerPolicy="no-referrer"
           />
         </AnimatePresence>
@@ -171,23 +143,23 @@ const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: stri
           <>
             <button 
               onClick={(e) => { e.stopPropagation(); prev(); }}
-              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all z-10 hidden sm:block"
+              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all hidden sm:block"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button 
               onClick={(e) => { e.stopPropagation(); next(); }}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all z-10 hidden sm:block"
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all hidden sm:block"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
               {urls.map((_, i) => (
                 <div 
                   key={i}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all",
-                    i === currentIndex ? "bg-white w-4" : "bg-white/50"
+                    i === currentIndex ? "bg-primary w-4" : "bg-primary/50"
                   )}
                 />
               ))}
