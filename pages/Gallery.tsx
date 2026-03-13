@@ -116,7 +116,7 @@ const Gallery: React.FC = () => {
 
   const handleLogout = () => auth.signOut();
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
@@ -162,7 +162,7 @@ const Gallery: React.FC = () => {
             canvas.height = height;
             const ctx = canvas.getContext('2d');
             ctx?.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', 0.8));
+            resolve(canvas.toDataURL('image/jpeg', 0.7)); // Reduced quality slightly to be safer
           };
           img.onerror = reject;
         };
@@ -170,14 +170,14 @@ const Gallery: React.FC = () => {
       });
     };
 
-    filesToProcess.forEach(async (file) => {
-      try {
-        const compressedDataUrl = await compressImage(file);
-        setPreviewUrls(prev => [...prev, compressedDataUrl]);
-      } catch (error) {
-        console.error("Erro ao processar imagem:", error);
-      }
-    });
+    try {
+      const compressedUrls = await Promise.all(
+        filesToProcess.map(file => compressImage(file))
+      );
+      setPreviewUrls(prev => [...prev, ...compressedUrls]);
+    } catch (error) {
+      console.error("Erro ao processar imagens:", error);
+    }
   };
 
   const handleUpload = async () => {
@@ -185,20 +185,26 @@ const Gallery: React.FC = () => {
 
     setIsUploading(true);
     try {
-      await addDoc(collection(db, 'photos'), {
-        urls: previewUrls,
-        caption: caption,
-        authorName: user.displayName || 'Convidado',
-        authorUid: user.uid,
-        authorPhotoUrl: user.photoURL,
-        timestamp: serverTimestamp(),
-      });
+      // Uploading individually to avoid Firestore 1MB limit per document
+      const uploadPromises = previewUrls.map(url => 
+        addDoc(collection(db, 'photos'), {
+          url: url,
+          caption: caption,
+          authorName: user.displayName || 'Convidado',
+          authorUid: user.uid,
+          authorPhotoUrl: user.photoURL,
+          timestamp: serverTimestamp(),
+        })
+      );
+      
+      await Promise.all(uploadPromises);
       
       setShowUploadModal(false);
       setCaption('');
       setPreviewUrls([]);
     } catch (error) {
       console.error("Erro ao enviar foto:", error);
+      alert("Erro ao enviar fotos. Tente enviar menos fotos de cada vez ou verifique sua conexão.");
     } finally {
       setIsUploading(false);
     }
@@ -332,33 +338,35 @@ const Gallery: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-between bg-white p-2 rounded-2xl border border-primary/10 shadow-sm">
-              <div className="flex items-center gap-2 pl-2">
-                <img src={user.photoURL || ''} className="w-8 h-8 rounded-full border border-primary/10" alt="" />
-                <span className="text-xs font-bold text-[#2c1810] truncate max-w-[120px]">{user.displayName}</span>
+            <div className="flex flex-1 items-center gap-2">
+              <div className="flex-1 flex items-center justify-between bg-white p-2 rounded-2xl border border-primary/10 shadow-sm">
+                <div className="flex items-center gap-2 pl-2">
+                  <img src={user.photoURL || ''} className="w-8 h-8 rounded-full border border-primary/10" alt="" />
+                  <span className="text-xs font-bold text-[#2c1810] truncate max-w-[120px]">{user.displayName}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => setShowUploadModal(true)} className="p-2.5 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 active:scale-90 transition-transform">
+                    <Plus className="w-5 h-5" />
+                  </button>
+                  <button onClick={handleLogout} className="p-2.5 text-gray-400 hover:text-red-500 transition-colors">
+                    <LogOut className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <button 
-                  onClick={() => {
-                    setIsSelectionMode(!isSelectionMode);
-                    setSelectedItems([]);
-                  }}
-                  className={cn(
-                    "px-4 py-2 rounded-xl text-xs font-bold transition-all border mr-1",
-                    isSelectionMode 
-                      ? "bg-primary text-white border-primary" 
-                      : "bg-white text-gray-600 border-gray-200"
-                  )}
-                >
-                  {isSelectionMode ? "Sair" : "Selecionar"}
-                </button>
-                <button onClick={() => setShowUploadModal(true)} className="p-2.5 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 active:scale-90 transition-transform">
-                  <Plus className="w-5 h-5" />
-                </button>
-                <button onClick={handleLogout} className="p-2.5 text-gray-400 hover:text-red-500 transition-colors">
-                  <LogOut className="w-5 h-5" />
-                </button>
-              </div>
+              <button 
+                onClick={() => {
+                  setIsSelectionMode(!isSelectionMode);
+                  setSelectedItems([]);
+                }}
+                className={cn(
+                  "px-5 py-3 rounded-2xl text-sm font-bold transition-all shadow-sm border",
+                  isSelectionMode 
+                    ? "bg-primary text-white border-primary" 
+                    : "bg-white text-gray-600 border-gray-200"
+                )}
+              >
+                {isSelectionMode ? "Sair" : "Selecionar"}
+              </button>
             </div>
           )}
         </div>
