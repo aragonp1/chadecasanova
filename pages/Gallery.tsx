@@ -53,14 +53,21 @@ const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: stri
   const [currentIndex, setCurrentIndex] = useState(0);
   const urls = photo.urls || (photo.url ? [photo.url] : []);
 
-  const next = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const next = () => {
     setCurrentIndex((prev) => (prev + 1) % urls.length);
   };
 
-  const prev = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const prev = () => {
     setCurrentIndex((prev) => (prev - 1 + urls.length) % urls.length);
+  };
+
+  const handleDragEnd = (e: any, { offset, velocity }: any) => {
+    const swipe = Math.abs(offset.x) > 50 || Math.abs(velocity.x) > 500;
+    if (swipe && offset.x > 0) {
+      prev();
+    } else if (swipe && offset.x < 0) {
+      next();
+    }
   };
 
   return (
@@ -114,17 +121,21 @@ const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: stri
       </div>
 
       {/* Image / Carousel */}
-      <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden">
+      <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden touch-pan-y">
         <AnimatePresence mode="wait">
           <motion.img 
             key={currentIndex}
             src={urls[currentIndex]} 
             alt={photo.caption} 
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.3 }}
-            className="w-full h-full object-cover"
+            exit={{ opacity: 0, x: -100 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
+            className="w-full h-full object-cover cursor-grab active:cursor-grabbing"
             referrerPolicy="no-referrer"
           />
         </AnimatePresence>
@@ -132,14 +143,14 @@ const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: stri
         {urls.length > 1 && (
           <>
             <button 
-              onClick={prev}
-              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all"
+              onClick={(e) => { e.stopPropagation(); prev(); }}
+              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all hidden sm:block"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button 
-              onClick={next}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all"
+              onClick={(e) => { e.stopPropagation(); next(); }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all hidden sm:block"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
@@ -472,37 +483,37 @@ const Gallery: React.FC = () => {
 
               <div className="p-6 space-y-6 overflow-y-auto flex-grow pb-10">
                 {/* File Drop/Select */}
-                <div className="grid grid-cols-2 gap-3">
-                  {previewUrls.map((url, index) => (
-                    <div key={index} className="relative aspect-square rounded-xl overflow-hidden group">
-                      <img src={url} className="w-full h-full object-cover" alt={`Preview ${index}`} />
+                {previewUrls.length > 0 ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    {previewUrls.map((url, index) => (
+                      <div key={index} className="relative aspect-square rounded-xl overflow-hidden group">
+                        <img src={url} className="w-full h-full object-cover" alt={`Preview ${index}`} />
+                        <button 
+                          onClick={() => removePreview(index)}
+                          className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                    {previewUrls.length < 5 && (
                       <button 
-                        onClick={() => removePreview(index)}
-                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => !isUploading && fileInputRef.current?.click()}
+                        className="aspect-square rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center hover:border-primary/30 hover:bg-primary/5 transition-all"
                       >
-                        <X className="w-3 h-3" />
+                        <Plus className="w-6 h-6 text-gray-300" />
+                        <span className="text-[10px] text-gray-400 mt-1">Adicionar</span>
                       </button>
-                    </div>
-                  ))}
-                  {previewUrls.length < 5 && (
-                    <button 
-                      onClick={() => !isUploading && fileInputRef.current?.click()}
-                      className="aspect-square rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center hover:border-primary/30 hover:bg-primary/5 transition-all"
-                    >
-                      <Plus className="w-6 h-6 text-gray-300" />
-                      <span className="text-[10px] text-gray-400 mt-1">Adicionar</span>
-                    </button>
-                  )}
-                </div>
-
-                {previewUrls.length === 0 && (
+                    )}
+                  </div>
+                ) : (
                   <div 
                     onClick={() => !isUploading && fileInputRef.current?.click()}
                     className="relative aspect-video rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer transition-all hover:border-primary/30 hover:bg-primary/5"
                   >
                     <Camera className="w-10 h-10 text-gray-300 mb-2" />
                     <p className="text-sm text-gray-500 font-medium">Clique para selecionar fotos</p>
-                    <p className="text-[10px] text-gray-400 mt-1">Máximo 5 fotos (500KB cada)</p>
+                    <p className="text-[10px] text-gray-400 mt-1">Máximo 5 fotos</p>
                   </div>
                 )}
 
