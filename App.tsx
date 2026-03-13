@@ -7,6 +7,7 @@ import Location from './pages/Location';
 import Gifts from './pages/Gifts';
 import Trajectory from './pages/Trajectory';
 import GuestList from './pages/GuestList';
+import Gallery from './pages/Gallery';
 import Layout from './components/Layout';
 
 // Componente para forçar o scroll para o topo em cada mudança de página
@@ -32,6 +33,7 @@ const App: React.FC = () => {
           <Route path="/presentes" element={<Gifts />} />
           <Route path="/trajetoria" element={<Trajectory />} />
           <Route path="/confirmados" element={<GuestList />} />
+          <Route path="/galeria" element={<Gallery />} />
         </Routes>
       </Layout>
     </Router>
