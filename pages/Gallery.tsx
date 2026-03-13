@@ -35,7 +35,8 @@ import {
   Image as ImageIcon,
   Smile,
   Trash2,
-  ArrowLeft
+  ArrowLeft,
+  Loader2
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -49,6 +50,8 @@ const EMOJIS = ['❤️', '😍', '😂', '🔥', '✨', '🙌'];
 const Gallery: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showUploadModal, setShowUploadModal] = useState(false);
@@ -69,8 +72,10 @@ const Gallery: React.FC = () => {
         ...doc.data()
       })) as Photo[];
       setPhotos(photosData);
+      setIsInitialLoading(false);
     }, (error) => {
       console.error("Erro ao buscar fotos:", error);
+      setIsInitialLoading(false);
     });
 
     return () => {
@@ -81,6 +86,7 @@ const Gallery: React.FC = () => {
 
   const handleLogin = async () => {
     const provider = new GoogleAuthProvider();
+    setIsLoggingIn(true);
     try {
       await signInWithPopup(auth, provider);
     } catch (error: any) {
@@ -90,6 +96,8 @@ const Gallery: React.FC = () => {
       }
       console.error("Erro ao fazer login:", error);
       alert("Ocorreu um erro ao tentar fazer login. Por favor, tente novamente.");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
@@ -211,10 +219,15 @@ const Gallery: React.FC = () => {
         {!user ? (
           <button 
             onClick={handleLogin}
-            className="flex items-center gap-2 bg-white border border-gray-200 px-6 py-3 rounded-full shadow-sm hover:shadow-md transition-all text-gray-700 font-medium"
+            disabled={isLoggingIn}
+            className="flex items-center gap-2 bg-white border border-gray-200 px-6 py-3 rounded-full shadow-sm hover:shadow-md transition-all text-gray-700 font-medium disabled:opacity-70"
           >
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
-            Entrar com Google para participar
+            {isLoggingIn ? (
+              <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            ) : (
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-5 h-5" alt="Google" />
+            )}
+            {isLoggingIn ? 'Entrando...' : 'Entrar com Google para participar'}
           </button>
         ) : (
           <div className="flex items-center gap-4 bg-white/50 backdrop-blur-sm p-2 pl-4 rounded-full border border-primary/10">
@@ -255,87 +268,96 @@ const Gallery: React.FC = () => {
 
       {/* Photos Grid */}
       <div className="grid grid-cols-1 gap-8">
-        <AnimatePresence mode="popLayout">
-          {photos.map((photo) => (
-            <motion.div 
-              key={photo.id}
-              layout
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-3xl overflow-hidden shadow-xl border border-primary/5 group"
-            >
-              {/* Photo Header */}
-              <div className="p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                    {photo.authorName.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-[#2c1810]">{photo.authorName}</p>
-                    <p className="text-xs text-olive opacity-60">
-                      {photo.timestamp?.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </div>
-                {user?.uid === photo.authorUid && (
-                  <button 
-                    onClick={() => handleDelete(photo.id)}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-
-              {/* Image */}
-              <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden">
-                <img 
-                  src={photo.url} 
-                  alt={photo.caption} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-
-              {/* Footer / Actions */}
-              <div className="p-6">
-                {photo.caption && (
-                  <p className="text-[#2c1810] mb-6 leading-relaxed italic font-serif text-lg">
-                    "{photo.caption}"
-                  </p>
-                )}
-
-                <div className="flex flex-wrap items-center gap-3">
-                  {EMOJIS.map((emoji) => (
-                    <button
-                      key={emoji}
-                      onClick={() => handleReaction(photo.id, emoji)}
-                      className={cn(
-                        "flex items-center gap-2 px-4 py-2 rounded-full border transition-all hover:scale-110 active:scale-95",
-                        photo.reactions?.[emoji] 
-                          ? "bg-primary/10 border-primary/20 text-primary" 
-                          : "bg-gray-50 border-gray-100 text-gray-500 hover:bg-white hover:border-primary/20"
-                      )}
-                    >
-                      <span className="text-lg">{emoji}</span>
-                      {photo.reactions?.[emoji] && (
-                        <span className="text-sm font-bold">{photo.reactions[emoji]}</span>
-                      )}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {photos.length === 0 && (
-          <div className="text-center py-20 bg-white/30 rounded-3xl border-2 border-dashed border-primary/20">
-            <ImageIcon className="w-12 h-12 text-primary/30 mx-auto mb-4" />
-            <p className="text-olive font-medium">Nenhuma foto enviada ainda.</p>
-            <p className="text-sm text-olive/60">Seja o primeiro a compartilhar!</p>
+        {isInitialLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+            <p className="text-olive font-medium animate-pulse">Carregando galeria...</p>
           </div>
+        ) : (
+          <>
+            <AnimatePresence mode="popLayout">
+              {photos.map((photo) => (
+                <motion.div 
+                  key={photo.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  className="bg-white rounded-3xl overflow-hidden shadow-xl border border-primary/5 group"
+                >
+                  {/* Photo Header */}
+                  <div className="p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                        {photo.authorName.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-[#2c1810]">{photo.authorName}</p>
+                        <p className="text-xs text-olive opacity-60">
+                          {photo.timestamp?.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </div>
+                    </div>
+                    {user?.uid === photo.authorUid && (
+                      <button 
+                        onClick={() => handleDelete(photo.id)}
+                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Image */}
+                  <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden">
+                    <img 
+                      src={photo.url} 
+                      alt={photo.caption} 
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+
+                  {/* Footer / Actions */}
+                  <div className="p-6">
+                    {photo.caption && (
+                      <p className="text-[#2c1810] mb-6 leading-relaxed italic font-serif text-lg">
+                        "{photo.caption}"
+                      </p>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-3">
+                      {EMOJIS.map((emoji) => (
+                        <button
+                          key={emoji}
+                          onClick={() => handleReaction(photo.id, emoji)}
+                          className={cn(
+                            "flex items-center gap-2 px-4 py-2 rounded-full border transition-all hover:scale-110 active:scale-95",
+                            photo.reactions?.[emoji] 
+                              ? "bg-primary/10 border-primary/20 text-primary" 
+                              : "bg-gray-50 border-gray-100 text-gray-500 hover:bg-white hover:border-primary/20"
+                          )}
+                        >
+                          <span className="text-lg">{emoji}</span>
+                          {photo.reactions?.[emoji] && (
+                            <span className="text-sm font-bold">{photo.reactions[emoji]}</span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+
+            {photos.length === 0 && (
+              <div className="text-center py-20 bg-white/30 rounded-3xl border-2 border-dashed border-primary/20">
+                <ImageIcon className="w-12 h-12 text-primary/30 mx-auto mb-4" />
+                <p className="text-olive font-medium">Nenhuma foto enviada ainda.</p>
+                <p className="text-sm text-olive/60">Seja o primeiro a compartilhar!</p>
+              </div>
+            )}
+          </>
         )}
       </div>
 
