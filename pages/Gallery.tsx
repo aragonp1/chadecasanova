@@ -31,7 +31,8 @@ import {
   Loader2,
   Download,
   Plus,
-  Maximize2
+  CheckCircle2,
+  Check
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -48,7 +49,11 @@ const Gallery: React.FC = () => {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
+  
+  // Estados para seleção e download em massa
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]); // "photoId-index"
   
   const [caption, setCaption] = useState('');
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -208,73 +213,202 @@ const Gallery: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  const toggleSelection = (e: React.MouseEvent, itemId: string) => {
+    e.stopPropagation();
+    setSelectedItems(prev => 
+      prev.includes(itemId) 
+        ? prev.filter(id => id !== itemId) 
+        : [...prev, itemId]
+    );
+  };
+
+  const handleBulkDownload = async () => {
+    if (selectedItems.length === 0) return;
+    
+    // Para cada item selecionado, encontrar a URL e baixar
+    selectedItems.forEach((itemId) => {
+      const [photoId, indexStr] = itemId.split('-');
+      const index = parseInt(indexStr);
+      const photo = photos.find(p => p.id === photoId);
+      if (photo) {
+        const url = photo.urls?.[index] || photo.url;
+        if (url) {
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `foto-${photoId}-${index}.jpg`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+      }
+    });
+    
+    setIsSelectionMode(false);
+    setSelectedItems([]);
+  };
+
+  // Transformar fotos em uma lista plana de itens individuais
+  const flatPhotos = photos.flatMap(photo => {
+    const urls = photo.urls || (photo.url ? [photo.url] : []);
+    return urls.map((url, index) => ({
+      ...photo,
+      displayUrl: url,
+      itemIndex: index,
+      uniqueId: `${photo.id}-${index}`
+    }));
+  });
+
   return (
-    <div className="min-h-screen bg-white pb-20">
-      {/* Header Estilo Celular */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 px-4 py-4 flex items-center justify-between">
-        <Link to="/" className="p-2 -ml-2 text-gray-600">
-          <ArrowLeft className="w-6 h-6" />
-        </Link>
-        <h1 className="text-lg font-bold text-gray-900">Galeria</h1>
-        <div className="w-10"></div> {/* Spacer */}
+    <div className="min-h-screen bg-[#FDFBF7] pb-32">
+      {/* Header Estilo Boho */}
+      <div className="w-full flex flex-col items-center animate-fade-in pt-8 px-4">
+        <div className="w-full max-w-2xl flex items-center justify-between mb-6">
+          <Link to="/" className="p-2 -ml-2 text-olive hover:text-primary transition-colors">
+            <ArrowLeft className="w-6 h-6" />
+          </Link>
+          <div className="flex items-center gap-2">
+            {user && (
+              <button 
+                onClick={() => {
+                  setIsSelectionMode(!isSelectionMode);
+                  setSelectedItems([]);
+                }}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-bold transition-all",
+                  isSelectionMode ? "bg-primary text-white" : "bg-white border border-gray-200 text-gray-600"
+                )}
+              >
+                {isSelectionMode ? "Cancelar" : "Selecionar"}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <header className="w-full text-center flex flex-col items-center mb-8">
+          <div className="mb-4 text-primary animate-bounce">
+            <span className="material-symbols-outlined text-5xl">photo_library</span>
+          </div>
+          <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
+            Galeria de Fotos<br/>
+            <span className="text-primary italic font-normal block mt-1">Momentos Especiais</span>
+          </h1>
+          <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
+            Compartilhe e reviva os melhores momentos do nosso encontro.
+          </p>
+        </header>
       </div>
 
-      <div className="max-w-4xl mx-auto px-1 pt-1">
+      <div className="max-w-4xl mx-auto px-1">
         {/* Auth & Upload Bar */}
         <div className="px-3 py-4 flex items-center justify-between gap-4">
           {!user ? (
             <button 
               onClick={handleLogin}
               disabled={isLoggingIn}
-              className="flex-1 flex items-center justify-center gap-2 bg-gray-100 py-3 rounded-xl text-sm font-bold text-gray-700 active:scale-95 transition-transform"
+              className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-200 py-3 rounded-2xl text-sm font-bold text-gray-700 active:scale-95 transition-transform shadow-sm"
             >
-              {isLoggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserIcon className="w-4 h-4" />}
-              Entrar para Postar
+              {isLoggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="" />}
+              Entrar para Participar
             </button>
           ) : (
-            <div className="flex-1 flex items-center justify-between bg-gray-50 p-2 rounded-2xl border border-gray-100">
-              <div className="flex items-center gap-2">
-                <img src={user.photoURL || ''} className="w-8 h-8 rounded-full" alt="" />
-                <span className="text-xs font-bold text-gray-700 truncate max-w-[100px]">{user.displayName?.split(' ')[0]}</span>
+            <div className="flex-1 flex items-center justify-between bg-white p-2 rounded-2xl border border-primary/10 shadow-sm">
+              <div className="flex items-center gap-2 pl-2">
+                <img src={user.photoURL || ''} className="w-8 h-8 rounded-full border border-primary/10" alt="" />
+                <span className="text-xs font-bold text-[#2c1810] truncate max-w-[120px]">{user.displayName}</span>
               </div>
               <div className="flex items-center gap-1">
-                <button onClick={() => setShowUploadModal(true)} className="p-2 bg-primary text-white rounded-full shadow-lg shadow-primary/20 active:scale-90 transition-transform">
+                <button onClick={() => setShowUploadModal(true)} className="p-2.5 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 active:scale-90 transition-transform">
                   <Plus className="w-5 h-5" />
                 </button>
-                <button onClick={handleLogout} className="p-2 text-gray-400">
-                  <LogOut className="w-4 h-4" />
+                <button onClick={handleLogout} className="p-2.5 text-gray-400 hover:text-red-500 transition-colors">
+                  <LogOut className="w-5 h-5" />
                 </button>
               </div>
             </div>
           )}
         </div>
 
+        {/* Bulk Actions Bar */}
+        <AnimatePresence>
+          {isSelectionMode && selectedItems.length > 0 && (
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white px-6 py-4 rounded-full shadow-2xl border border-primary/20 flex items-center gap-6"
+            >
+              <span className="text-sm font-bold text-[#2c1810]">{selectedItems.length} selecionadas</span>
+              <button 
+                onClick={handleBulkDownload}
+                className="flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg shadow-primary/20"
+              >
+                <Download className="w-4 h-4" />
+                Baixar
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Grid de Fotos */}
         {isInitialLoading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+            <p className="text-olive font-medium animate-pulse">Carregando momentos...</p>
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-0.5 sm:gap-1">
-            {photos.map((photo) => {
-              const displayUrl = photo.urls?.[0] || photo.url;
+            {flatPhotos.map((item) => {
+              const isSelected = selectedItems.includes(item.uniqueId);
               return (
                 <motion.div
-                  key={photo.id}
-                  layoutId={photo.id}
-                  onClick={() => setSelectedPhoto(photo)}
+                  key={item.uniqueId}
+                  layoutId={item.uniqueId}
+                  onClick={() => isSelectionMode ? toggleSelection(null as any, item.uniqueId) : setSelectedPhoto(item as any)}
                   className="relative aspect-square cursor-pointer overflow-hidden group"
-                  whileHover={{ opacity: 0.9 }}
                 >
                   <img 
-                    src={displayUrl} 
-                    className="w-full h-full object-cover" 
+                    src={item.displayUrl} 
+                    className={cn(
+                      "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110",
+                      isSelected && "opacity-50 scale-90"
+                    )} 
                     alt="" 
                     referrerPolicy="no-referrer"
                   />
-                  {photo.urls && photo.urls.length > 1 && (
-                    <div className="absolute top-2 right-2 p-1 bg-black/20 backdrop-blur-sm rounded-md">
-                      <ImageIcon className="w-3 h-3 text-white" />
+                  
+                  {/* Avatar do Autor no Canto */}
+                  <div className="absolute bottom-1.5 left-1.5 w-6 h-6 rounded-full border border-white/50 overflow-hidden shadow-sm z-10">
+                    {item.authorPhotoUrl ? (
+                      <img src={item.authorPhotoUrl} className="w-full h-full object-cover" alt="" />
+                    ) : (
+                      <div className="w-full h-full bg-primary/20 flex items-center justify-center text-[8px] text-primary font-bold">
+                        {item.authorName.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Ícone de Lixo (se for o dono) */}
+                  {!isSelectionMode && user?.uid === item.authorUid && (
+                    <button 
+                      onClick={(e) => handleDelete(e, item.id)}
+                      className="absolute top-1.5 right-1.5 p-1.5 bg-black/30 hover:bg-red-500 text-white rounded-lg backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all z-10"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+
+                  {/* Indicador de Seleção */}
+                  {isSelectionMode && (
+                    <div className={cn(
+                      "absolute inset-0 flex items-center justify-center transition-all",
+                      isSelected ? "bg-primary/20" : "bg-transparent"
+                    )}>
+                      <div className={cn(
+                        "w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all",
+                        isSelected ? "bg-primary border-primary text-white" : "bg-white/20 border-white text-transparent"
+                      )}>
+                        <Check className="w-4 h-4" />
+                      </div>
                     </div>
                   )}
                 </motion.div>
@@ -392,7 +526,7 @@ const Gallery: React.FC = () => {
             />
             
             <motion.div 
-              layoutId={selectedPhoto.id}
+              layoutId={selectedPhoto.uniqueId}
               className="relative w-full h-full flex flex-col"
             >
               {/* Top Bar */}
@@ -402,7 +536,7 @@ const Gallery: React.FC = () => {
                 </button>
                 <div className="flex items-center gap-2">
                   <button 
-                    onClick={(e) => handleDownload(e, selectedPhoto.urls?.[0] || selectedPhoto.url || '')}
+                    onClick={(e) => handleDownload(e, selectedPhoto.displayUrl)}
                     className="p-2 bg-white/10 rounded-full"
                   >
                     <Download className="w-5 h-5" />
@@ -420,16 +554,13 @@ const Gallery: React.FC = () => {
 
               {/* Image Container */}
               <div className="flex-1 flex items-center justify-center p-2">
-                <div className="w-full max-h-full overflow-y-auto no-scrollbar">
-                  {(selectedPhoto.urls || [selectedPhoto.url]).map((url, i) => (
-                    <img 
-                      key={i}
-                      src={url} 
-                      className="w-full h-auto rounded-lg mb-2" 
-                      alt="" 
-                      referrerPolicy="no-referrer"
-                    />
-                  ))}
+                <div className="w-full max-h-full overflow-y-auto no-scrollbar flex items-center justify-center">
+                  <img 
+                    src={selectedPhoto.displayUrl} 
+                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" 
+                    alt="" 
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
               </div>
 
