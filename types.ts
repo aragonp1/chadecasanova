@@ -13,11 +13,17 @@ export interface RSVPConfirmation extends RSVPFormData {
   timestamp: string;
 }
 
-export interface GiftItem {
+export interface Photo {
   id: string;
-  name: string;
-  priceRange: string;
-  category: string;
-  imageUrl: string;
-  reserved: boolean;
+  url: string;
+  caption: string;
+  authorName: string;
+  authorUid: string;
+  timestamp: any;
+  reactions?: { [key: string]: number };
+}
+
+export interface Reaction {
+  type: string;
+  userId: string;
 }
