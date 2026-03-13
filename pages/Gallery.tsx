@@ -36,7 +36,8 @@ import {
   Smile,
   Trash2,
   ArrowLeft,
-  Loader2
+  Loader2,
+  Download
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -44,8 +45,6 @@ import { twMerge } from 'tailwind-merge';
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
-const EMOJIS = ['❤️', '😍', '😂', '🔥', '✨', '🙌'];
 
 const Gallery: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -129,6 +128,7 @@ const Gallery: React.FC = () => {
         caption: caption,
         authorName: user.displayName || 'Convidado',
         authorUid: user.uid,
+        authorPhotoUrl: user.photoURL,
         timestamp: serverTimestamp(),
         reactions: {}
       });
@@ -145,44 +145,13 @@ const Gallery: React.FC = () => {
     }
   };
 
-  const handleReaction = async (photoId: string, emoji: string) => {
-    if (!user) {
-      handleLogin();
-      return;
-    }
-
-    const reactionRef = doc(db, 'photos', photoId, 'reactions', user.uid);
-    const photoRef = doc(db, 'photos', photoId);
-
-    try {
-      const reactionDoc = await getDoc(reactionRef);
-      
-      if (reactionDoc.exists()) {
-        const oldEmoji = reactionDoc.data().type;
-        if (oldEmoji === emoji) {
-          // Remove reaction
-          await deleteDoc(reactionRef);
-          await updateDoc(photoRef, {
-            [`reactions.${emoji}`]: increment(-1)
-          });
-        } else {
-          // Change reaction
-          await setDoc(reactionRef, { type: emoji, userId: user.uid });
-          await updateDoc(photoRef, {
-            [`reactions.${oldEmoji}`]: increment(-1),
-            [`reactions.${emoji}`]: increment(1)
-          });
-        }
-      } else {
-        // New reaction
-        await setDoc(reactionRef, { type: emoji, userId: user.uid });
-        await updateDoc(photoRef, {
-          [`reactions.${emoji}`]: increment(1)
-        });
-      }
-    } catch (error) {
-      console.error("Erro ao reagir:", error);
-    }
+  const handleDownload = (url: string, filename: string) => {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleDelete = async (photoId: string) => {
@@ -288,9 +257,18 @@ const Gallery: React.FC = () => {
                   {/* Photo Header */}
                   <div className="p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                        {photo.authorName.charAt(0).toUpperCase()}
-                      </div>
+                      {photo.authorPhotoUrl ? (
+                        <img 
+                          src={photo.authorPhotoUrl} 
+                          className="w-10 h-10 rounded-full object-cover border border-primary/10" 
+                          alt={photo.authorName}
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                          {photo.authorName.charAt(0).toUpperCase()}
+                        </div>
+                      )}
                       <div>
                         <p className="text-sm font-bold text-[#2c1810]">{photo.authorName}</p>
                         <p className="text-xs text-olive opacity-60">
@@ -298,14 +276,24 @@ const Gallery: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    {user?.uid === photo.authorUid && (
+                    <div className="flex items-center gap-1">
                       <button 
-                        onClick={() => handleDelete(photo.id)}
-                        className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                        onClick={() => handleDownload(photo.url, `foto-${photo.id}.png`)}
+                        className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
+                        title="Baixar Foto"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Download className="w-4 h-4" />
                       </button>
-                    )}
+                      {user?.uid === photo.authorUid && (
+                        <button 
+                          onClick={() => handleDelete(photo.id)}
+                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                          title="Excluir Foto"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   {/* Image */}
@@ -319,32 +307,12 @@ const Gallery: React.FC = () => {
                   </div>
 
                   {/* Footer / Actions */}
-                  <div className="p-6">
+                  <div className="p-6 pt-0">
                     {photo.caption && (
-                      <p className="text-[#2c1810] mb-6 leading-relaxed italic font-serif text-lg">
+                      <p className="text-[#2c1810] leading-relaxed italic font-serif text-lg">
                         "{photo.caption}"
                       </p>
                     )}
-
-                    <div className="flex flex-wrap items-center gap-3">
-                      {EMOJIS.map((emoji) => (
-                        <button
-                          key={emoji}
-                          onClick={() => handleReaction(photo.id, emoji)}
-                          className={cn(
-                            "flex items-center gap-2 px-4 py-2 rounded-full border transition-all hover:scale-110 active:scale-95",
-                            photo.reactions?.[emoji] 
-                              ? "bg-primary/10 border-primary/20 text-primary" 
-                              : "bg-gray-50 border-gray-100 text-gray-500 hover:bg-white hover:border-primary/20"
-                          )}
-                        >
-                          <span className="text-lg">{emoji}</span>
-                          {photo.reactions?.[emoji] && (
-                            <span className="text-sm font-bold">{photo.reactions[emoji]}</span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -376,9 +344,9 @@ const Gallery: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden"
+              className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             >
-              <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between shrink-0">
                 <h2 className="text-xl font-bold text-[#2c1810]">Enviar Foto</h2>
                 <button 
                   onClick={() => setShowUploadModal(false)}
@@ -389,12 +357,12 @@ const Gallery: React.FC = () => {
                 </button>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="p-6 space-y-6 overflow-y-auto flex-grow">
                 {/* File Drop/Select */}
                 <div 
                   onClick={() => !isUploading && fileInputRef.current?.click()}
                   className={cn(
-                    "relative aspect-video rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden",
+                    "relative aspect-square sm:aspect-video rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden shrink-0",
                     previewUrl ? "border-primary/50" : "border-gray-200 hover:border-primary/30 hover:bg-primary/5"
                   )}
                 >
