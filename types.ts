@@ -19,6 +19,7 @@ export interface Photo {
   caption: string;
   authorName: string;
   authorUid: string;
+  authorPhotoUrl?: string | null;
   timestamp: any;
   reactions?: { [key: string]: number };
 }
