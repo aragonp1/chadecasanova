@@ -194,7 +194,9 @@ const Gallery: React.FC = () => {
 
   const handleDelete = async (e: React.MouseEvent, photoId: string) => {
     e.stopPropagation();
-    if (!window.confirm("Deseja excluir esta foto?")) return;
+    // Usando uma confirmação simples via estado ou apenas removendo o window.confirm por enquanto
+    // para seguir as diretrizes de não usar window.confirm em iframes.
+    // Em uma versão futura, poderíamos adicionar um modal de confirmação bonito.
     try {
       await deleteDoc(doc(db, 'photos', photoId));
       if (selectedPhoto?.id === photoId) setSelectedPhoto(null);
@@ -213,8 +215,8 @@ const Gallery: React.FC = () => {
     document.body.removeChild(link);
   };
 
-  const toggleSelection = (e: React.MouseEvent, itemId: string) => {
-    e.stopPropagation();
+  const toggleSelection = (e: React.MouseEvent | null, itemId: string) => {
+    if (e) e.stopPropagation();
     setSelectedItems(prev => 
       prev.includes(itemId) 
         ? prev.filter(id => id !== itemId) 
@@ -267,20 +269,7 @@ const Gallery: React.FC = () => {
             <ArrowLeft className="w-6 h-6" />
           </Link>
           <div className="flex items-center gap-2">
-            {user && (
-              <button 
-                onClick={() => {
-                  setIsSelectionMode(!isSelectionMode);
-                  setSelectedItems([]);
-                }}
-                className={cn(
-                  "px-4 py-2 rounded-full text-sm font-bold transition-all",
-                  isSelectionMode ? "bg-primary text-white" : "bg-white border border-gray-200 text-gray-600"
-                )}
-              >
-                {isSelectionMode ? "Cancelar" : "Selecionar"}
-              </button>
-            )}
+            {/* Botão de seleção removido daqui para ser colocado na barra de ações abaixo */}
           </div>
         </div>
 
@@ -300,16 +289,32 @@ const Gallery: React.FC = () => {
 
       <div className="max-w-4xl mx-auto px-1">
         {/* Auth & Upload Bar */}
-        <div className="px-3 py-4 flex items-center justify-between gap-4">
+        <div className="px-3 py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {!user ? (
-            <button 
-              onClick={handleLogin}
-              disabled={isLoggingIn}
-              className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-200 py-3 rounded-2xl text-sm font-bold text-gray-700 active:scale-95 transition-transform shadow-sm"
-            >
-              {isLoggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="" />}
-              Entrar para Participar
-            </button>
+            <div className="flex flex-1 items-center gap-2">
+              <button 
+                onClick={handleLogin}
+                disabled={isLoggingIn}
+                className="flex-1 flex items-center justify-center gap-2 bg-white border border-gray-200 py-3 rounded-2xl text-sm font-bold text-gray-700 active:scale-95 transition-transform shadow-sm"
+              >
+                {isLoggingIn ? <Loader2 className="w-4 h-4 animate-spin" /> : <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" className="w-4 h-4" alt="" />}
+                Entrar para Participar
+              </button>
+              <button 
+                onClick={() => {
+                  setIsSelectionMode(!isSelectionMode);
+                  setSelectedItems([]);
+                }}
+                className={cn(
+                  "px-5 py-3 rounded-2xl text-sm font-bold transition-all shadow-sm border",
+                  isSelectionMode 
+                    ? "bg-primary text-white border-primary" 
+                    : "bg-white text-gray-600 border-gray-200"
+                )}
+              >
+                {isSelectionMode ? "Cancelar" : "Selecionar"}
+              </button>
+            </div>
           ) : (
             <div className="flex-1 flex items-center justify-between bg-white p-2 rounded-2xl border border-primary/10 shadow-sm">
               <div className="flex items-center gap-2 pl-2">
@@ -317,6 +322,20 @@ const Gallery: React.FC = () => {
                 <span className="text-xs font-bold text-[#2c1810] truncate max-w-[120px]">{user.displayName}</span>
               </div>
               <div className="flex items-center gap-1">
+                <button 
+                  onClick={() => {
+                    setIsSelectionMode(!isSelectionMode);
+                    setSelectedItems([]);
+                  }}
+                  className={cn(
+                    "px-4 py-2 rounded-xl text-xs font-bold transition-all border mr-1",
+                    isSelectionMode 
+                      ? "bg-primary text-white border-primary" 
+                      : "bg-white text-gray-600 border-gray-200"
+                  )}
+                >
+                  {isSelectionMode ? "Sair" : "Selecionar"}
+                </button>
                 <button onClick={() => setShowUploadModal(true)} className="p-2.5 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 active:scale-90 transition-transform">
                   <Plus className="w-5 h-5" />
                 </button>
@@ -363,13 +382,13 @@ const Gallery: React.FC = () => {
                 <motion.div
                   key={item.uniqueId}
                   layoutId={item.uniqueId}
-                  onClick={() => isSelectionMode ? toggleSelection(null as any, item.uniqueId) : setSelectedPhoto(item as any)}
+                  onClick={(e) => isSelectionMode ? toggleSelection(e, item.uniqueId) : setSelectedPhoto(item as any)}
                   className="relative aspect-square cursor-pointer overflow-hidden group"
                 >
                   <img 
                     src={item.displayUrl} 
                     className={cn(
-                      "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110",
+                      "w-full h-full object-cover transition-opacity duration-300",
                       isSelected && "opacity-50 scale-90"
                     )} 
                     alt="" 
@@ -391,7 +410,7 @@ const Gallery: React.FC = () => {
                   {!isSelectionMode && user?.uid === item.authorUid && (
                     <button 
                       onClick={(e) => handleDelete(e, item.id)}
-                      className="absolute top-1.5 right-1.5 p-1.5 bg-black/30 hover:bg-red-500 text-white rounded-lg backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all z-10"
+                      className="absolute top-1.5 right-1.5 p-1.5 bg-black/30 hover:bg-red-500 text-white rounded-lg backdrop-blur-sm opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all z-10"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -524,27 +543,29 @@ const Gallery: React.FC = () => {
               onClick={() => setSelectedPhoto(null)}
               className="absolute inset-0 bg-black/95 backdrop-blur-xl"
             />
-            
-            <motion.div 
+                <motion.div 
               layoutId={selectedPhoto.uniqueId}
-              className="relative w-full h-full flex flex-col"
+              className="relative w-full h-[100dvh] flex flex-col overflow-hidden bg-black"
             >
               {/* Top Bar */}
-              <div className="p-4 flex items-center justify-between text-white z-10">
-                <button onClick={() => setSelectedPhoto(null)} className="p-2 bg-white/10 rounded-full">
+              <div className="shrink-0 p-4 flex items-center justify-between text-white z-20 bg-gradient-to-b from-black/50 to-transparent">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setSelectedPhoto(null); }} 
+                  className="p-2 bg-white/10 backdrop-blur-md rounded-full active:scale-95 transition-transform"
+                >
                   <X className="w-6 h-6" />
                 </button>
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={(e) => handleDownload(e, selectedPhoto.displayUrl)}
-                    className="p-2 bg-white/10 rounded-full"
+                    className="p-2 bg-white/10 backdrop-blur-md rounded-full active:scale-95 transition-transform"
                   >
                     <Download className="w-5 h-5" />
                   </button>
                   {user?.uid === selectedPhoto.authorUid && (
                     <button 
-                      onClick={(e) => handleDelete(e, selectedPhoto.id)}
-                      className="p-2 bg-red-500/20 text-red-400 rounded-full"
+                      onClick={(e) => { e.stopPropagation(); handleDelete(e, selectedPhoto.id); }}
+                      className="p-2 bg-red-500/20 backdrop-blur-md text-red-500 rounded-full active:scale-95 transition-transform"
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>
@@ -553,43 +574,49 @@ const Gallery: React.FC = () => {
               </div>
 
               {/* Image Container */}
-              <div className="flex-1 flex items-center justify-center p-2">
-                <div className="w-full max-h-full overflow-y-auto no-scrollbar flex items-center justify-center">
-                  <img 
-                    src={selectedPhoto.displayUrl} 
-                    className="max-w-full max-h-full object-contain rounded-lg shadow-2xl" 
-                    alt="" 
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
+              <div className="flex-1 relative flex items-center justify-center p-2 sm:p-8 min-h-0">
+                <motion.img 
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  src={selectedPhoto.displayUrl} 
+                  className="max-w-full max-h-full object-contain shadow-2xl" 
+                  alt="" 
+                  referrerPolicy="no-referrer"
+                />
               </div>
 
               {/* Info Bar */}
               <motion.div 
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                className="p-6 bg-gradient-to-t from-black/80 to-transparent text-white"
+                className="shrink-0 p-6 pb-10 sm:pb-6 bg-gradient-to-t from-black via-black/80 to-transparent text-white z-10"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-white/10 overflow-hidden">
-                    {selectedPhoto.authorPhotoUrl ? (
-                      <img src={selectedPhoto.authorPhotoUrl} className="w-full h-full object-cover" alt="" />
-                    ) : (
-                      <UserIcon className="w-5 h-5" />
-                    )}
+                <div className="max-w-2xl mx-auto">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-white/20 overflow-hidden shrink-0">
+                      {selectedPhoto.authorPhotoUrl ? (
+                        <img src={selectedPhoto.authorPhotoUrl} className="w-full h-full object-cover" alt="" />
+                      ) : (
+                        <div className="w-full h-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
+                          {selectedPhoto.authorName.charAt(0)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-bold text-sm sm:text-base truncate">{selectedPhoto.authorName}</p>
+                      <p className="text-[10px] sm:text-xs opacity-60">
+                        {selectedPhoto.timestamp?.toDate ? selectedPhoto.timestamp.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : 'Recentemente'}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="font-bold text-sm">{selectedPhoto.authorName}</p>
-                    <p className="text-[10px] opacity-60">
-                      {selectedPhoto.timestamp?.toDate ? selectedPhoto.timestamp.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : 'Recentemente'}
-                    </p>
-                  </div>
+                  {selectedPhoto.caption && (
+                    <div className="max-h-40 overflow-y-auto no-scrollbar">
+                      <p className="text-base sm:text-lg font-medium leading-relaxed italic text-gray-100">
+                        "{selectedPhoto.caption}"
+                      </p>
+                    </div>
+                  )}
                 </div>
-                {selectedPhoto.caption && (
-                  <p className="text-lg font-medium leading-relaxed italic">
-                    "{selectedPhoto.caption}"
-                  </p>
-                )}
               </motion.div>
             </motion.div>
           </div>
