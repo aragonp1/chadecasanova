@@ -1,0 +1,63 @@
+{
+  "entities": {
+    "Photo": {
+      "title": "Photo",
+      "description": "Uma foto enviada pelos convidados ou pela anfitriã.",
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "URL da imagem (base64 ou link externo)."
+        },
+        "caption": {
+          "type": "string",
+          "description": "Legenda da foto."
+        },
+        "authorName": {
+          "type": "string",
+          "description": "Nome de quem enviou."
+        },
+        "authorUid": {
+          "type": "string",
+          "description": "UID do autor (opcional se anônimo)."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Data e hora do envio."
+        },
+        "reactions": {
+          "type": "object",
+          "description": "Mapa de tipos de reação para contagem."
+        }
+      },
+      "required": ["url", "authorName", "timestamp"]
+    },
+    "Reaction": {
+      "title": "Reaction",
+      "description": "Uma reação de um usuário a uma foto.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Tipo da reação (ex: ❤️, 😍, 😂)."
+        },
+        "userId": {
+          "type": "string",
+          "description": "ID do usuário que reagiu."
+        }
+      },
+      "required": ["type", "userId"]
+    }
+  },
+  "firestore": {
+    "/photos": {
+      "schema": "Photo",
+      "description": "Coleção principal de fotos do evento."
+    },
+    "/photos/{photoId}/reactions": {
+      "schema": "Reaction",
+      "description": "Reações individuais para cada foto."
+    }
+  }
+}

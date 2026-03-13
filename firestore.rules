@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isValidPhoto(data) {
+      return data.url is string && data.url.size() > 0 && data.url.size() < 2000000 &&
+             data.authorName is string && data.authorName.size() > 0 && data.authorName.size() < 100 &&
+             data.timestamp is timestamp;
+    }
+
+    function isValidReaction(data) {
+      return data.type is string && data.type.size() > 0 && data.type.size() < 10 &&
+             data.userId == request.auth.uid;
+    }
+
+    // Photos collection
+    match /photos/{photoId} {
+      // Permitir leitura para todos (público para convidados)
+      allow read: if true;
+      
+      // Permitir criação se autenticado (ou anônimo se configurado, mas vamos exigir auth básico do Google)
+      allow create: if isAuthenticated() && isValidPhoto(request.resource.data);
+      
+      // Permitir atualização apenas de reações (se implementado via campo) ou pelo autor
+      // Por enquanto, vamos permitir update se for o autor ou se for apenas para incrementar reações
+      allow update: if isAuthenticated() && (request.auth.uid == resource.data.authorUid || request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reactions']));
+      
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.authorUid;
+
+      // Reactions subcollection
+      match /reactions/{userId} {
+        allow read: if true;
+        allow write: if isAuthenticated() && userId == request.auth.uid && isValidReaction(request.resource.data);
+      }
+    }
+    
+    // Users collection (opcional, para perfis)
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}
