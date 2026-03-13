@@ -52,6 +52,7 @@ const Gallery: React.FC = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [selectedPhoto, setSelectedPhoto] = useState<any | null>(null);
+  const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
   
   // Estados para seleção e download em massa
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -214,12 +215,15 @@ const Gallery: React.FC = () => {
 
   const handleDelete = async (e: React.MouseEvent, photoId: string) => {
     e.stopPropagation();
-    // Usando uma confirmação simples via estado ou apenas removendo o window.confirm por enquanto
-    // para seguir as diretrizes de não usar window.confirm em iframes.
-    // Em uma versão futura, poderíamos adicionar um modal de confirmação bonito.
+    setPhotoToDelete(photoId);
+  };
+
+  const confirmDelete = async () => {
+    if (!photoToDelete) return;
     try {
-      await deleteDoc(doc(db, 'photos', photoId));
-      if (selectedPhoto?.id === photoId) setSelectedPhoto(null);
+      await deleteDoc(doc(db, 'photos', photoToDelete));
+      if (selectedPhoto?.id === photoToDelete) setSelectedPhoto(null);
+      setPhotoToDelete(null);
     } catch (error) {
       console.error("Erro ao excluir foto:", error);
     }
@@ -697,6 +701,46 @@ const Gallery: React.FC = () => {
                   )}
                 </div>
               </motion.div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+      {/* Modal de Confirmação de Exclusão */}
+      <AnimatePresence>
+        {photoToDelete && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setPhotoToDelete(null)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full max-w-sm bg-white rounded-[2rem] p-8 shadow-2xl text-center"
+            >
+              <div className="w-16 h-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Trash2 className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Excluir Foto?</h3>
+              <p className="text-gray-500 mb-8">Tem certeza que deseja remover a foto?</p>
+              <div className="flex flex-col gap-3">
+                <button 
+                  onClick={confirmDelete}
+                  className="w-full py-4 bg-red-500 text-white rounded-2xl font-bold shadow-lg shadow-red-200 active:scale-95 transition-transform"
+                >
+                  Sim, Excluir
+                </button>
+                <button 
+                  onClick={() => setPhotoToDelete(null)}
+                  className="w-full py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold active:scale-95 transition-transform"
+                >
+                  Cancelar
+                </button>
+              </div>
             </motion.div>
           </div>
         )}
