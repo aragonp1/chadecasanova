@@ -295,18 +295,13 @@ const Gallery: React.FC = () => {
           </div>
         </div>
 
-        <header className="w-full text-center flex flex-col items-center mb-8">
-          <div className="mb-4 text-primary animate-bounce">
-            <span className="material-symbols-outlined text-5xl">photo_library</span>
-          </div>
-          <h1 className="text-[#2c1810] font-serif text-[40px] md:text-[48px] font-bold leading-[1.1] mb-2 tracking-tight">
-            Galeria de Fotos<br/>
-            <span className="text-primary italic font-normal block mt-1">Momentos Especiais</span>
-          </h1>
-          <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
-            Compartilhe e reviva os melhores momentos do nosso encontro.
-          </p>
-        </header>
+        <header className="mb-8">
+        <div className="mb-4 text-primary">
+          <span className="material-symbols-outlined text-6xl">photo_library</span>
+        </div>
+        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Galeria de Fotos</h2>
+        <p className="text-olive font-medium">Compartilhe e reviva os melhores momentos 🤳</p>
+      </header>
       </div>
 
       <div className="max-w-4xl mx-auto px-1">
