@@ -37,7 +37,10 @@ import {
   Trash2,
   ArrowLeft,
   Loader2,
-  Download
+  Download,
+  ChevronLeft,
+  ChevronRight,
+  Plus
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -45,6 +48,127 @@ import { twMerge } from 'tailwind-merge';
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: string) => void; onDownload: (url: string, id: string) => void }> = ({ photo, user, onDelete, onDownload }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const urls = photo.urls || (photo.url ? [photo.url] : []);
+
+  const next = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % urls.length);
+  };
+
+  const prev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + urls.length) % urls.length);
+  };
+
+  return (
+    <motion.div 
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      className="bg-white rounded-3xl overflow-hidden shadow-xl border border-primary/5 group"
+    >
+      {/* Photo Header */}
+      <div className="p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          {photo.authorPhotoUrl ? (
+            <img 
+              src={photo.authorPhotoUrl} 
+              className="w-10 h-10 rounded-full object-cover border border-primary/10" 
+              alt={photo.authorName}
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+              {photo.authorName.charAt(0).toUpperCase()}
+            </div>
+          )}
+          <div>
+            <p className="text-sm font-bold text-[#2c1810]">{photo.authorName}</p>
+            <p className="text-xs text-olive opacity-60">
+              {photo.timestamp?.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <button 
+            onClick={() => onDownload(urls[currentIndex], `foto-${photo.id}-${currentIndex}.png`)}
+            className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
+            title="Baixar Foto Atual"
+          >
+            <Download className="w-4 h-4" />
+          </button>
+          {user?.uid === photo.authorUid && (
+            <button 
+              onClick={() => onDelete(photo.id)}
+              className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+              title="Excluir Foto"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Image / Carousel */}
+      <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden">
+        <AnimatePresence mode="wait">
+          <motion.img 
+            key={currentIndex}
+            src={urls[currentIndex]} 
+            alt={photo.caption} 
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
+            className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
+          />
+        </AnimatePresence>
+
+        {urls.length > 1 && (
+          <>
+            <button 
+              onClick={prev}
+              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button 
+              onClick={next}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-black/30 hover:bg-black/50 text-white rounded-full backdrop-blur-sm transition-all"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5">
+              {urls.map((_, i) => (
+                <div 
+                  key={i}
+                  className={cn(
+                    "w-2 h-2 rounded-full transition-all",
+                    i === currentIndex ? "bg-white w-4" : "bg-white/50"
+                  )}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Footer / Actions */}
+      <div className="p-6 pt-0 mt-4">
+        {photo.caption && (
+          <p className="text-[#2c1810] leading-relaxed italic font-serif text-lg">
+            "{photo.caption}"
+          </p>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
 const Gallery: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -55,8 +179,8 @@ const Gallery: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [caption, setCaption] = useState('');
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -103,28 +227,46 @@ const Gallery: React.FC = () => {
   const handleLogout = () => auth.signOut();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.size > 800000) { // ~800KB limit for Firestore base64
-        alert("A imagem é muito grande. Por favor, escolha uma imagem menor que 800KB.");
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    if (previewUrls.length + files.length > 5) {
+      alert("Você pode enviar no máximo 5 fotos por vez.");
+      return;
+    }
+
+    const newFiles: File[] = [];
+    const newPreviews: string[] = [];
+
+    files.forEach(file => {
+      if (file.size > 500000) { // Reduzi para 500KB para caber mais fotos no limite do Firestore
+        alert(`A imagem ${file.name} é muito grande. Por favor, escolha imagens menores que 500KB.`);
         return;
       }
-      setSelectedFile(file);
+      newFiles.push(file);
+      
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewUrl(reader.result as string);
+        setPreviewUrls(prev => [...prev, reader.result as string]);
       };
       reader.readAsDataURL(file);
-    }
+    });
+
+    setSelectedFiles(prev => [...prev, ...newFiles]);
+  };
+
+  const removePreview = (index: number) => {
+    setPreviewUrls(prev => prev.filter((_, i) => i !== index));
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const handleUpload = async () => {
-    if (!user || !previewUrl) return;
+    if (!user || previewUrls.length === 0) return;
 
     setIsUploading(true);
     try {
       await addDoc(collection(db, 'photos'), {
-        url: previewUrl,
+        urls: previewUrls,
         caption: caption,
         authorName: user.displayName || 'Convidado',
         authorUid: user.uid,
@@ -135,8 +277,8 @@ const Gallery: React.FC = () => {
       
       setShowUploadModal(false);
       setCaption('');
-      setSelectedFile(null);
-      setPreviewUrl(null);
+      setSelectedFiles([]);
+      setPreviewUrls([]);
     } catch (error) {
       console.error("Erro ao enviar foto:", error);
       alert("Erro ao enviar foto. Tente novamente.");
@@ -246,75 +388,13 @@ const Gallery: React.FC = () => {
           <>
             <AnimatePresence mode="popLayout">
               {photos.map((photo) => (
-                <motion.div 
-                  key={photo.id}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="bg-white rounded-3xl overflow-hidden shadow-xl border border-primary/5 group"
-                >
-                  {/* Photo Header */}
-                  <div className="p-4 flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {photo.authorPhotoUrl ? (
-                        <img 
-                          src={photo.authorPhotoUrl} 
-                          className="w-10 h-10 rounded-full object-cover border border-primary/10" 
-                          alt={photo.authorName}
-                          referrerPolicy="no-referrer"
-                        />
-                      ) : (
-                        <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
-                          {photo.authorName.charAt(0).toUpperCase()}
-                        </div>
-                      )}
-                      <div>
-                        <p className="text-sm font-bold text-[#2c1810]">{photo.authorName}</p>
-                        <p className="text-xs text-olive opacity-60">
-                          {photo.timestamp?.toDate().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <button 
-                        onClick={() => handleDownload(photo.url, `foto-${photo.id}.png`)}
-                        className="p-2 text-gray-400 hover:text-primary hover:bg-primary/5 rounded-full transition-all"
-                        title="Baixar Foto"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
-                      {user?.uid === photo.authorUid && (
-                        <button 
-                          onClick={() => handleDelete(photo.id)}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                          title="Excluir Foto"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Image */}
-                  <div className="relative aspect-square sm:aspect-video bg-gray-100 overflow-hidden">
-                    <img 
-                      src={photo.url} 
-                      alt={photo.caption} 
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      referrerPolicy="no-referrer"
-                    />
-                  </div>
-
-                  {/* Footer / Actions */}
-                  <div className="p-6 pt-0">
-                    {photo.caption && (
-                      <p className="text-[#2c1810] leading-relaxed italic font-serif text-lg">
-                        "{photo.caption}"
-                      </p>
-                    )}
-                  </div>
-                </motion.div>
+                <PhotoCard 
+                  key={photo.id} 
+                  photo={photo} 
+                  user={user} 
+                  onDelete={handleDelete} 
+                  onDownload={handleDownload} 
+                />
               ))}
             </AnimatePresence>
 
@@ -332,7 +412,7 @@ const Gallery: React.FC = () => {
       {/* Upload Modal */}
       <AnimatePresence>
         {showUploadModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -347,7 +427,7 @@ const Gallery: React.FC = () => {
               className="relative w-full max-w-md bg-white rounded-[2rem] shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
             >
               <div className="p-6 border-b border-gray-100 flex items-center justify-between shrink-0">
-                <h2 className="text-xl font-bold text-[#2c1810]">Enviar Foto</h2>
+                <h2 className="text-xl font-bold text-[#2c1810]">Enviar Fotos</h2>
                 <button 
                   onClick={() => setShowUploadModal(false)}
                   disabled={isUploading}
@@ -357,37 +437,50 @@ const Gallery: React.FC = () => {
                 </button>
               </div>
 
-              <div className="p-6 space-y-6 overflow-y-auto flex-grow">
+              <div className="p-6 space-y-6 overflow-y-auto flex-grow pb-10">
                 {/* File Drop/Select */}
-                <div 
-                  onClick={() => !isUploading && fileInputRef.current?.click()}
-                  className={cn(
-                    "relative aspect-square sm:aspect-video rounded-2xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden shrink-0",
-                    previewUrl ? "border-primary/50" : "border-gray-200 hover:border-primary/30 hover:bg-primary/5"
+                <div className="grid grid-cols-2 gap-3">
+                  {previewUrls.map((url, index) => (
+                    <div key={index} className="relative aspect-square rounded-xl overflow-hidden group">
+                      <img src={url} className="w-full h-full object-cover" alt={`Preview ${index}`} />
+                      <button 
+                        onClick={() => removePreview(index)}
+                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                  {previewUrls.length < 5 && (
+                    <button 
+                      onClick={() => !isUploading && fileInputRef.current?.click()}
+                      className="aspect-square rounded-xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center hover:border-primary/30 hover:bg-primary/5 transition-all"
+                    >
+                      <Plus className="w-6 h-6 text-gray-300" />
+                      <span className="text-[10px] text-gray-400 mt-1">Adicionar</span>
+                    </button>
                   )}
-                >
-                  {previewUrl ? (
-                    <>
-                      <img src={previewUrl} className="w-full h-full object-cover" alt="Preview" />
-                      <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                        <p className="text-white font-bold bg-black/40 px-4 py-2 rounded-full">Trocar Foto</p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <Camera className="w-10 h-10 text-gray-300 mb-2" />
-                      <p className="text-sm text-gray-500 font-medium">Clique para selecionar uma foto</p>
-                      <p className="text-[10px] text-gray-400 mt-1">Máximo de 800KB</p>
-                    </>
-                  )}
-                  <input 
-                    type="file" 
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    accept="image/*"
-                    className="hidden"
-                  />
                 </div>
+
+                {previewUrls.length === 0 && (
+                  <div 
+                    onClick={() => !isUploading && fileInputRef.current?.click()}
+                    className="relative aspect-video rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer transition-all hover:border-primary/30 hover:bg-primary/5"
+                  >
+                    <Camera className="w-10 h-10 text-gray-300 mb-2" />
+                    <p className="text-sm text-gray-500 font-medium">Clique para selecionar fotos</p>
+                    <p className="text-[10px] text-gray-400 mt-1">Máximo 5 fotos (500KB cada)</p>
+                  </div>
+                )}
+
+                <input 
+                  type="file" 
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                />
 
                 {/* Caption Input */}
                 <div className="space-y-2">
@@ -398,17 +491,17 @@ const Gallery: React.FC = () => {
                   <textarea 
                     value={caption}
                     onChange={(e) => setCaption(e.target.value)}
-                    placeholder="Escreva algo sobre este momento..."
+                    placeholder="Escreva algo sobre estes momentos..."
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none h-24"
                   />
                 </div>
 
                 <button 
                   onClick={handleUpload}
-                  disabled={isUploading || !previewUrl}
+                  disabled={isUploading || previewUrls.length === 0}
                   className={cn(
                     "w-full py-4 rounded-xl font-bold text-white shadow-lg transition-all flex items-center justify-center gap-2",
-                    isUploading || !previewUrl 
+                    isUploading || previewUrls.length === 0 
                       ? "bg-gray-300 cursor-not-allowed" 
                       : "bg-primary hover:shadow-primary/30 hover:-translate-y-0.5 active:translate-y-0"
                   )}
