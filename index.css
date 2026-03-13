@@ -1,0 +1,15 @@
+
+/* Estilos customizados para a Galeria */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Ajustes para o modal estilo celular */
+.modal-content-scroll {
+  max-height: calc(100vh - 180px);
+}
