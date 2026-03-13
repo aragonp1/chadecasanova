@@ -160,7 +160,7 @@ const PhotoCard: React.FC<{ photo: Photo; user: User | null; onDelete: (id: stri
                   key={i}
                   className={cn(
                     "w-2 h-2 rounded-full transition-all",
-                    i === currentIndex ? "bg-white w-4" : "bg-white/50"
+                    i === currentIndex ? "bg-primary w-4" : "bg-primary/50"
                   )}
                 />
               ))}
