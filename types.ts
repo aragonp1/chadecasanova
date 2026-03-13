@@ -15,7 +15,8 @@ export interface RSVPConfirmation extends RSVPFormData {
 
 export interface Photo {
   id: string;
-  url: string;
+  url?: string; // Mantido para compatibilidade com fotos antigas
+  urls?: string[]; // Novo campo para carrossel
   caption: string;
   authorName: string;
   authorUid: string;
