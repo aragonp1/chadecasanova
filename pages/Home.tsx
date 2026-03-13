@@ -44,7 +44,7 @@ const Home: React.FC = () => {
         <BohoButton label="Informações do Evento" icon="location_on" to="/local" />
         <BohoButton label="Confirmar Presença" icon="check_circle" variant="primary" to="/rsvp" /> 
         <BohoButton label="Mimos e Desejos" icon="redeem" to="/presentes" />
-        {/* <BohoButton label="Galeria de Fotos" icon="photo_library" variant="primary" to="/galeria" /> */}
+        <BohoButton label="Galeria de Fotos" icon="photo_library" variant="primary" to="/galeria" />
       </div>
 
       <div className="mt-14 text-center">
