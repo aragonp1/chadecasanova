@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Background Texture */}
       <div className="fixed inset-0 pointer-events-none boho-texture z-0"></div>
       
-      <main className="flex-grow w-full max-w-lg mx-auto relative z-10 px-6 py-8 md:py-12">
+      <main className="flex-grow w-full max-w-lg mx-auto relative z-20 px-6 py-8 md:py-12">
         {children}
       </main>
 
