@@ -120,6 +120,18 @@ const Gallery: React.FC = () => {
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    // Restrição de até 10 fotos
+    const remainingSlots = 10 - previewUrls.length;
+    if (remainingSlots <= 0) {
+      alert("Você já atingiu o limite de 10 fotos por envio.");
+      return;
+    }
+    
+    const filesToProcess = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      alert(`Apenas as primeiras ${remainingSlots} fotos serão processadas (limite de 10).`);
+    }
+
     const compressImage = (file: File): Promise<string> => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -158,7 +170,7 @@ const Gallery: React.FC = () => {
       });
     };
 
-    files.forEach(async (file) => {
+    filesToProcess.forEach(async (file) => {
       try {
         const compressedDataUrl = await compressImage(file);
         setPreviewUrls(prev => [...prev, compressedDataUrl]);
@@ -227,8 +239,9 @@ const Gallery: React.FC = () => {
   const handleBulkDownload = async () => {
     if (selectedItems.length === 0) return;
     
-    // Para cada item selecionado, encontrar a URL e baixar
-    selectedItems.forEach((itemId) => {
+    // Para cada item selecionado, encontrar a URL e baixar com um pequeno delay
+    // para evitar que o navegador bloqueie downloads múltiplos
+    for (const itemId of selectedItems) {
       const [photoId, indexStr] = itemId.split('-');
       const index = parseInt(indexStr);
       const photo = photos.find(p => p.id === photoId);
@@ -237,13 +250,16 @@ const Gallery: React.FC = () => {
         if (url) {
           const link = document.createElement('a');
           link.href = url;
-          link.download = `foto-${photoId}-${index}.jpg`;
+          link.setAttribute('download', `foto-${photoId}-${index}.jpg`);
+          link.setAttribute('target', '_blank');
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
+          // Pequeno delay entre downloads
+          await new Promise(resolve => setTimeout(resolve, 300));
         }
       }
-    });
+    }
     
     setIsSelectionMode(false);
     setSelectedItems([]);
@@ -261,7 +277,7 @@ const Gallery: React.FC = () => {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFBF7] pb-32">
+    <div className="min-h-screen bg-white pb-32">
       {/* Header Estilo Boho */}
       <div className="w-full flex flex-col items-center animate-fade-in pt-8 px-4">
         <div className="w-full max-w-2xl flex items-center justify-between mb-6">
@@ -351,18 +367,18 @@ const Gallery: React.FC = () => {
         <AnimatePresence>
           {isSelectionMode && selectedItems.length > 0 && (
             <motion.div 
-              initial={{ y: 20, opacity: 0 }}
+              initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white px-6 py-4 rounded-full shadow-2xl border border-primary/20 flex items-center gap-6"
+              exit={{ y: 100, opacity: 0 }}
+              className="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-[60] bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-2xl sm:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-primary/20 flex items-center justify-between sm:justify-center gap-4 sm:gap-6"
             >
-              <span className="text-sm font-bold text-[#2c1810]">{selectedItems.length} selecionadas</span>
+              <span className="text-xs sm:text-sm font-bold text-[#2c1810] whitespace-nowrap">{selectedItems.length} selecionadas</span>
               <button 
                 onClick={handleBulkDownload}
-                className="flex items-center gap-2 bg-primary text-white px-6 py-2 rounded-full font-bold text-sm shadow-lg shadow-primary/20"
+                className="flex items-center gap-2 bg-primary text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl sm:rounded-full font-bold text-xs sm:text-sm shadow-lg shadow-primary/20 active:scale-95 transition-transform"
               >
                 <Download className="w-4 h-4" />
-                Baixar
+                Baixar Todas
               </button>
             </motion.div>
           )}
