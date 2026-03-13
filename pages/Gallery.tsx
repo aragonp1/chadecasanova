@@ -32,7 +32,9 @@ import {
   Download,
   Plus,
   CheckCircle2,
-  Check
+  Check,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -271,6 +273,28 @@ const Gallery: React.FC = () => {
     setSelectedItems([]);
   };
 
+  const handleSelectAll = () => {
+    if (selectedItems.length === flatPhotos.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(flatPhotos.map(p => p.uniqueId));
+    }
+  };
+
+  const navigatePhoto = (direction: 'prev' | 'next') => {
+    if (!selectedPhoto) return;
+    const currentIndex = flatPhotos.findIndex(p => p.uniqueId === selectedPhoto.uniqueId);
+    if (currentIndex === -1) return;
+
+    let nextIndex;
+    if (direction === 'next') {
+      nextIndex = (currentIndex + 1) % flatPhotos.length;
+    } else {
+      nextIndex = (currentIndex - 1 + flatPhotos.length) % flatPhotos.length;
+    }
+    setSelectedPhoto(flatPhotos[nextIndex] as any);
+  };
+
   // Transformar fotos em uma lista plana de itens individuais
   const flatPhotos = photos.flatMap(photo => {
     const urls = photo.urls || (photo.url ? [photo.url] : []);
@@ -294,22 +318,25 @@ const Gallery: React.FC = () => {
             {/* Botão de seleção removido daqui para ser colocado na barra de ações abaixo */}
           </div>
         </div>
-        <div className="animate-fade-in flex flex-col items-center text-center">
-        <header className="mb-8">
-        <div className="mb-4 text-primary">
-          <span className="material-symbols-outlined text-6xl">photo_library</span>
-        </div>
-        <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">Galeria de Fotos</h2>
-        <p className="text-olive font-medium">Compartilhe e reviva os melhores momentos 🤳</p>
-      </header>
+
+        <header className="w-full text-center flex flex-col items-center mb-8">
+          <div className="mb-4 text-primary">
+            <span className="material-symbols-outlined text-5xl">photo_library</span>
           </div>
+          <h2 className="text-3xl font-serif font-bold text-[#2c1810] mb-2">
+            Galeria de Fotos
+          </h2>
+          <p className="text-olive text-base md:text-lg font-normal leading-relaxed max-w-[300px] mx-auto opacity-80">
+            Compartilhe e reviva os melhores momentos 🤳
+          </p>
+        </header>
       </div>
 
       <div className="max-w-4xl mx-auto px-1">
         {/* Auth & Upload Bar */}
-        <div className="px-3 py-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <div className="px-3 py-4 flex flex-col items-stretch gap-3">
           {!user ? (
-            <div className="flex flex-1 items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch gap-2">
               <button 
                 onClick={handleLogin}
                 disabled={isLoggingIn}
@@ -334,13 +361,13 @@ const Gallery: React.FC = () => {
               </button>
             </div>
           ) : (
-            <div className="flex flex-1 items-center gap-2">
-              <div className="flex-1 flex items-center justify-between bg-white p-2 rounded-2xl border border-primary/10 shadow-sm">
-                <div className="flex items-center gap-2 pl-2">
-                  <img src={user.photoURL || ''} className="w-8 h-8 rounded-full border border-primary/10" alt="" />
-                  <span className="text-xs font-bold text-[#2c1810] truncate max-w-[120px]">{user.displayName}</span>
+            <div className="flex flex-col sm:flex-row items-stretch gap-2">
+              <div className="flex-1 flex items-center justify-between bg-white p-2 rounded-2xl border border-primary/10 shadow-sm min-w-0">
+                <div className="flex items-center gap-2 pl-2 min-w-0">
+                  <img src={user.photoURL || ''} className="w-8 h-8 rounded-full border border-primary/10 shrink-0" alt="" />
+                  <span className="text-xs font-bold text-[#2c1810] truncate">{user.displayName}</span>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 shrink-0">
                   <button onClick={() => setShowUploadModal(true)} className="p-2.5 bg-primary text-white rounded-xl shadow-lg shadow-primary/20 active:scale-90 transition-transform">
                     <Plus className="w-5 h-5" />
                   </button>
@@ -355,7 +382,7 @@ const Gallery: React.FC = () => {
                   setSelectedItems([]);
                 }}
                 className={cn(
-                  "px-5 py-3 rounded-2xl text-sm font-bold transition-all shadow-sm border",
+                  "px-5 py-3 rounded-2xl text-sm font-bold transition-all shadow-sm border whitespace-nowrap",
                   isSelectionMode 
                     ? "bg-primary text-white border-primary" 
                     : "bg-white text-gray-600 border-gray-200"
@@ -369,21 +396,31 @@ const Gallery: React.FC = () => {
 
         {/* Bulk Actions Bar */}
         <AnimatePresence>
-          {isSelectionMode && selectedItems.length > 0 && (
+          {isSelectionMode && (
             <motion.div 
               initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 100, opacity: 0 }}
-              className="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-[60] bg-white px-4 sm:px-6 py-3 sm:py-4 rounded-2xl sm:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-primary/20 flex items-center justify-between sm:justify-center gap-4 sm:gap-6"
+              className="fixed bottom-6 left-4 right-4 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-[60] bg-white px-4 py-3 rounded-2xl sm:rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-primary/20 flex flex-col sm:flex-row items-center gap-3 sm:gap-6"
             >
-              <span className="text-xs sm:text-sm font-bold text-[#2c1810] whitespace-nowrap">{selectedItems.length} selecionadas</span>
-              <button 
-                onClick={handleBulkDownload}
-                className="flex items-center gap-2 bg-primary text-white px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl sm:rounded-full font-bold text-xs sm:text-sm shadow-lg shadow-primary/20 active:scale-95 transition-transform"
-              >
-                <Download className="w-4 h-4" />
-                Baixar Todas
-              </button>
+              <div className="flex items-center justify-between w-full sm:w-auto gap-4">
+                <span className="text-xs sm:text-sm font-bold text-[#2c1810] whitespace-nowrap">{selectedItems.length} selecionadas</span>
+                <button 
+                  onClick={handleSelectAll}
+                  className="text-xs font-bold text-primary hover:underline"
+                >
+                  {selectedItems.length === flatPhotos.length ? "Desmarcar Tudo" : "Selecionar Tudo"}
+                </button>
+              </div>
+              {selectedItems.length > 0 && (
+                <button 
+                  onClick={handleBulkDownload}
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl sm:rounded-full font-bold text-xs sm:text-sm shadow-lg shadow-primary/20 active:scale-95 transition-transform"
+                >
+                  <Download className="w-4 h-4" />
+                  Baixar Todas
+                </button>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -594,12 +631,34 @@ const Gallery: React.FC = () => {
               </div>
 
               {/* Image Container */}
-              <div className="flex-1 relative flex items-center justify-center p-2 sm:p-8 min-h-0">
+              <div className="flex-1 relative flex items-center justify-center p-2 sm:p-8 min-h-0 overflow-hidden">
+                {/* Navigation Arrows (Desktop) */}
+                <button 
+                  onClick={(e) => { e.stopPropagation(); navigatePhoto('prev'); }}
+                  className="absolute left-4 z-30 p-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white hidden sm:block transition-colors"
+                >
+                  <ChevronLeft className="w-8 h-8" />
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); navigatePhoto('next'); }}
+                  className="absolute right-4 z-30 p-2 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-full text-white hidden sm:block transition-colors"
+                >
+                  <ChevronRight className="w-8 h-8" />
+                </button>
+
                 <motion.img 
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
+                  key={selectedPhoto.uniqueId}
+                  initial={{ x: 300, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -300, opacity: 0 }}
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  onDragEnd={(_, info) => {
+                    if (info.offset.x > 100) navigatePhoto('prev');
+                    else if (info.offset.x < -100) navigatePhoto('next');
+                  }}
                   src={selectedPhoto.displayUrl} 
-                  className="max-w-full max-h-full object-contain shadow-2xl" 
+                  className="max-w-full max-h-full object-contain shadow-2xl cursor-grab active:cursor-grabbing" 
                   alt="" 
                   referrerPolicy="no-referrer"
                 />
